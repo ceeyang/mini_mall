@@ -1,0 +1,22 @@
+{
+  "name": "mini-mall",
+  "version": "1.0.0",
+  "description": "Mini Mall - 精品购物独立站最小单元",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo '静态站点，无需构建'",
+    "start": "npx serve . -p 3000"
+  },
+  "keywords": [
+    "ecommerce",
+    "mall",
+    "shopping",
+    "独立站"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
+}
