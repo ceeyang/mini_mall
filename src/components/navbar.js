@@ -25,8 +25,8 @@ export function renderNavbar() {
           <div class="hidden md:flex items-center space-x-6">
             <a href="index.html" class="text-gray-700 hover:text-indigo-600 transition-colors duration-200 cursor-pointer">首页</a>
             <a href="products.html" class="text-gray-700 hover:text-indigo-600 transition-colors duration-200 cursor-pointer">商品</a>
-            <a href="index.html#about" class="text-gray-700 hover:text-indigo-600 transition-colors duration-200 cursor-pointer">关于</a>
-            <a href="index.html#contact" class="text-gray-700 hover:text-indigo-600 transition-colors duration-200 cursor-pointer">联系</a>
+            <a href="about.html" class="text-gray-700 hover:text-indigo-600 transition-colors duration-200 cursor-pointer">关于</a>
+            <a href="contact.html" class="text-gray-700 hover:text-indigo-600 transition-colors duration-200 cursor-pointer">联系</a>
           </div>
           <a href="cart.html" id="cart-button" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-200 cursor-pointer font-medium flex items-center">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

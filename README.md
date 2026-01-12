@@ -15,10 +15,12 @@ mini_mall/
 ├── netlify.toml          # Netlify 部署配置
 ├── .gitignore            # Git 忽略文件
 ├── README.md             # 项目文档（本文件）
-├── DEPLOYMENT.md         # 详细部署文档
-├── QUICKSTART.md         # 快速开始指南
-├── ARCHITECTURE.md       # 架构文档
-├── PAYMENT_INTEGRATION.md # 支付接入指南
+└── doc/                  # 文档目录
+    ├── DEPLOYMENT.md     # 详细部署文档
+    ├── QUICKSTART.md     # 快速开始指南
+    ├── ARCHITECTURE.md   # 架构文档
+    ├── PAYMENT_INTEGRATION.md # 支付接入指南
+    └── DEPLOY_NOW.md     # 立即部署指南
 └── src/                  # 源代码目录
     ├── components/       # 组件模块
     │   ├── navbar.js    # 导航栏组件
@@ -119,7 +121,7 @@ mini_mall/
 
 ### 支付接入
 
-详细的支付接入指南请查看 `PAYMENT_INTEGRATION.md` 文件。
+详细的支付接入指南请查看 `doc/PAYMENT_INTEGRATION.md` 文件。
 
 当前支付功能为模拟实现，实际接入时需要：
 1. 注册相应的支付平台账号
@@ -209,13 +211,13 @@ git push -u origin main
 
 Netlify 同样支持 ES6 模块，配置与 Vercel 类似。
 
-详细步骤请查看 `DEPLOYMENT.md` 文件。
+详细步骤请查看 `doc/DEPLOYMENT.md` 文件。
 
 ### 方法 3: 部署到 GitHub Pages
 
 GitHub Pages 支持 ES6 模块，但需要确保所有路径都是相对路径（本项目已符合要求）。
 
-详细步骤请查看 `DEPLOYMENT.md` 文件。
+详细步骤请查看 `doc/DEPLOYMENT.md` 文件。
 
 ## 🔧 代码结构说明
 

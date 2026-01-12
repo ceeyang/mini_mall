@@ -19,10 +19,10 @@ export function renderFooter() {
           <div>
             <h3 class="text-white font-bold text-lg mb-4">快速链接</h3>
             <ul class="space-y-2">
-              <li><a href="#home" class="hover:text-white transition-colors duration-200 cursor-pointer">首页</a></li>
-              <li><a href="#products" class="hover:text-white transition-colors duration-200 cursor-pointer">商品</a></li>
-              <li><a href="#about" class="hover:text-white transition-colors duration-200 cursor-pointer">关于</a></li>
-              <li><a href="#contact" class="hover:text-white transition-colors duration-200 cursor-pointer">联系</a></li>
+              <li><a href="index.html" class="hover:text-white transition-colors duration-200 cursor-pointer">首页</a></li>
+              <li><a href="products.html" class="hover:text-white transition-colors duration-200 cursor-pointer">商品</a></li>
+              <li><a href="about.html" class="hover:text-white transition-colors duration-200 cursor-pointer">关于</a></li>
+              <li><a href="contact.html" class="hover:text-white transition-colors duration-200 cursor-pointer">联系</a></li>
             </ul>
           </div>
           <div>

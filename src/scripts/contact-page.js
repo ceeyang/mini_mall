@@ -1,53 +1,32 @@
 /**
- * 主入口文件
- * 初始化所有模块和组件
+ * 联系我们页面入口文件
+ * 初始化联系我们页面的所有组件
  */
 
 import { renderNavbar, initNavbar } from '../components/navbar.js';
-import { renderHero } from '../components/hero.js';
-import { renderProducts, initProducts } from '../components/products.js';
-import { renderCart, initCart } from '../components/cart.js';
-import { renderAbout } from '../components/about.js';
 import { renderContact } from '../components/contact.js';
 import { renderFooter } from '../components/footer.js';
 import { initUI } from './ui.js';
 import { cartManager } from './cart.js';
 
 /**
- * 初始化应用
+ * 初始化联系我们页面
  */
-function initApp() {
-  // 渲染所有组件
+function initContactPage() {
+  // 渲染导航栏
   const navbarContainer = document.getElementById('navbar-container');
   if (navbarContainer) {
     navbarContainer.innerHTML = renderNavbar();
     initNavbar();
   }
 
-  const heroContainer = document.getElementById('hero-container');
-  if (heroContainer) {
-    heroContainer.innerHTML = renderHero();
-  }
-
-  const productsContainer = document.getElementById('products-container');
-  if (productsContainer) {
-    // 首页只显示前3个商品，并显示"更多商品"按钮
-    productsContainer.innerHTML = renderProducts(3);
-    initProducts();
-  }
-
-  const aboutContainer = document.getElementById('about-container');
-  if (aboutContainer) {
-    // 首页版本，传入 false
-    aboutContainer.innerHTML = renderAbout(false);
-  }
-
+  // 渲染联系我们内容（独立页面版本）
   const contactContainer = document.getElementById('contact-container');
   if (contactContainer) {
-    // 首页版本，传入 false
-    contactContainer.innerHTML = renderContact(false);
+    contactContainer.innerHTML = renderContact(true);
   }
 
+  // 渲染页脚
   const footerContainer = document.getElementById('footer-container');
   if (footerContainer) {
     footerContainer.innerHTML = renderFooter();
@@ -68,7 +47,7 @@ function initApp() {
 
 // DOM 加载完成后初始化
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initApp);
+  document.addEventListener('DOMContentLoaded', initContactPage);
 } else {
-  initApp();
+  initContactPage();
 }

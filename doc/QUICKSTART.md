@@ -77,10 +77,10 @@ Vercel 会自动重新部署！✨
 
 ## 📚 更多信息
 
-- 详细部署步骤：查看 `DEPLOYMENT.md`
+- 详细部署步骤：查看 `doc/DEPLOYMENT.md`
 - 项目说明：查看 `README.md`
 - 遇到问题：查看文档中的"常见问题"部分
 
 ---
 
-**需要帮助？** 查看 `DEPLOYMENT.md` 获取详细步骤！
+**需要帮助？** 查看 `doc/DEPLOYMENT.md` 获取详细步骤！
