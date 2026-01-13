@@ -6,58 +6,88 @@
 
 ```
 mini_mall/
-├── index.html              # 首页
-├── products.html           # 商品列表页
-├── cart.html              # 购物车页
-├── checkout.html          # 结算页
-├── package.json           # 项目配置文件
+├── frontend/              # 前端代码目录
+│   ├── index.html         # 首页（唯一在 frontend 根目录的页面）
+│   ├── package.json       # 前端项目配置
+│   ├── package-lock.json  # 依赖锁定文件
+│   └── src/               # 前端源代码
+│       ├── pages/         # 页面文件目录
+│       │   ├── products.html      # 商品列表页
+│       │   ├── cart.html          # 购物车页
+│       │   ├── checkout.html      # 结算页
+│       │   ├── login.html         # 登录/注册页
+│       │   ├── user-center.html   # 用户中心/订单查询页
+│       │   ├── about.html         # 关于我们页
+│       │   └── contact.html       # 联系我们页
+│       ├── components/    # 组件模块
+│       │   ├── navbar.js  # 导航栏组件
+│       │   ├── hero.js    # Hero 区域组件
+│       │   ├── products.js # 商品展示组件
+│       │   ├── products-list.js # 商品列表组件
+│       │   ├── cart.js    # 购物车组件
+│       │   ├── checkout.js # 结算组件
+│       │   ├── login.js   # 登录/注册组件
+│       │   ├── user-center.js # 用户中心组件
+│       │   ├── about.js   # 关于我们组件
+│       │   ├── contact.js # 联系我们组件
+│       │   └── footer.js  # 页脚组件
+│       ├── scripts/       # JavaScript 模块
+│       │   ├── main.js    # 首页入口文件
+│       │   ├── products-page.js # 商品页入口
+│       │   ├── cart-page.js # 购物车页入口
+│       │   ├── checkout-page.js # 结算页入口
+│       │   ├── login-page.js # 登录页入口
+│       │   ├── user-center-page.js # 用户中心页入口
+│       │   ├── about-page.js # 关于我们页入口
+│       │   ├── contact-page.js # 联系我们页入口
+│       │   ├── cart.js    # 购物车管理模块
+│       │   ├── auth.js    # 用户认证模块
+│       │   ├── orders.js  # 订单管理模块
+│       │   ├── payment.js # 支付服务模块
+│       │   └── ui.js      # UI 交互模块
+│       ├── styles/        # 样式文件
+│       │   └── main.css   # 主样式文件
+│       ├── data/          # 数据文件
+│       │   └── products.js # 商品数据
+│       └── assets/        # 静态资源
+│           └── images/    # 图片资源
+├── backend/               # 后端代码目录（预留）
+│   ├── src/              # 后端源代码
+│   ├── config/           # 配置文件
+│   ├── models/           # 数据模型
+│   ├── routes/           # 路由文件
+│   ├── middleware/       # 中间件
+│   ├── database/         # 数据库相关
+│   └── README.md         # 后端说明文档
+├── doc/                  # 文档目录
+│   ├── DEPLOYMENT.md     # 详细部署文档
+│   ├── QUICKSTART.md     # 快速开始指南
+│   ├── ARCHITECTURE.md   # 架构文档
+│   ├── PAYMENT_INTEGRATION.md # 支付接入指南
+│   ├── GOOGLE_OAUTH.md   # Google OAuth 接入指南
+│   └── DEPLOY_NOW.md     # 立即部署指南
 ├── vercel.json           # Vercel 部署配置
 ├── netlify.toml          # Netlify 部署配置
+├── deploy.sh             # 部署脚本
 ├── .gitignore            # Git 忽略文件
-├── README.md             # 项目文档（本文件）
-└── doc/                  # 文档目录
-    ├── DEPLOYMENT.md     # 详细部署文档
-    ├── QUICKSTART.md     # 快速开始指南
-    ├── ARCHITECTURE.md   # 架构文档
-    ├── PAYMENT_INTEGRATION.md # 支付接入指南
-    └── DEPLOY_NOW.md     # 立即部署指南
-└── src/                  # 源代码目录
-    ├── components/       # 组件模块
-    │   ├── navbar.js    # 导航栏组件
-    │   ├── hero.js      # Hero 区域组件
-    │   ├── products.js  # 商品展示组件
-    │   ├── cart.js      # 购物车组件
-    │   ├── checkout.js  # 结算组件
-    │   ├── about.js     # 关于我们组件
-    │   ├── contact.js   # 联系我们组件
-    │   └── footer.js    # 页脚组件
-    ├── scripts/         # JavaScript 模块
-    │   ├── main.js      # 首页入口文件
-    │   ├── products-page.js  # 商品页入口文件
-    │   ├── cart-page.js      # 购物车页入口文件
-    │   ├── checkout-page.js  # 结算页入口文件
-    │   ├── cart.js      # 购物车管理模块
-    │   ├── payment.js   # 支付服务模块
-    │   └── ui.js        # UI 交互模块
-    ├── styles/          # 样式文件
-    │   └── main.css     # 主样式文件
-    ├── data/            # 数据文件
-    │   └── products.js  # 商品数据
-    └── assets/          # 静态资源
-        └── images/      # 图片资源
+├── .cursorrules          # Cursor 规则文件
+└── README.md             # 项目文档（本文件）
 ```
 
 ## ✨ 功能特性
 
-- ✅ **多页面架构**：首页、商品页、购物车页、结算页独立页面
+- ✅ **多页面架构**：首页、商品页、购物车页、结算页、登录页、用户中心独立页面
+- ✅ **用户认证系统**：支持邮箱登录/注册和 Google OAuth 登录
+- ✅ **订单管理**：订单创建、查询、状态跟踪
+- ✅ **快递进度查询**：实时查看订单物流信息
 - ✅ **模块化设计**：符合 Google 前端开发规范，代码结构清晰
 - ✅ **完整购物车功能**：添加、查看、删除、更新数量、清空购物车
 - ✅ **结算功能**：完整的订单提交和支付流程
 - ✅ **支付渠道预留**：支持支付宝、微信支付、Stripe 接入
-- ✅ **响应式设计**：支持移动端和桌面端
+- ✅ **响应式设计**：支持移动端和桌面端，包含移动端汉堡菜单
 - ✅ **现代化 UI**：使用 Tailwind CSS
 - ✅ **ES6 模块**：使用原生 ES6 模块系统
-- ✅ **本地存储**：购物车数据保存在 localStorage
+- ✅ **本地存储**：购物车、用户信息、订单数据保存在 localStorage
 - ✅ **平滑滚动导航**
 - ✅ **无障碍访问支持**（prefers-reduced-motion）
 - ✅ **SEO 友好的 HTML 结构**
@@ -84,10 +114,24 @@ mini_mall/
    - 跳转到结算页
 
 4. **结算页（checkout.html）**
+   - 需要登录后才能访问
    - 填写收货信息
    - 选择支付方式
    - 提交订单
    - 支付处理
+   - 订单创建
+
+5. **登录页（login.html）**
+   - 邮箱登录/注册
+   - Google OAuth 登录
+   - 登录状态保持
+
+6. **用户中心（user-center.html）**
+   - 查看用户信息
+   - 查看所有订单
+   - 查看订单详情
+   - 查询快递进度
+   - 退出登录
 
 ## 🛒 购物车功能
 
@@ -110,6 +154,54 @@ mini_mall/
 4. **删除商品**：点击商品右侧的删除按钮
 5. **清空购物车**：点击"清空购物车"按钮
 6. **去结算**：点击"去结算"按钮，跳转到结算页面
+
+## 👤 用户认证功能
+
+### 登录方式
+
+- ✅ **邮箱登录/注册**：使用邮箱和密码登录或注册
+- ✅ **Google OAuth 登录**：使用 Google 账号快速登录（预留接口）
+
+### 用户功能
+
+- ✅ 用户信息管理
+- ✅ 登录状态保持（localStorage）
+- ✅ 自动跳转（未登录访问受保护页面时跳转到登录页）
+
+### Google OAuth 接入
+
+详细的 Google OAuth 接入指南请查看 `doc/GOOGLE_OAUTH.md` 文件。
+
+当前 Google 登录为模拟实现，实际接入时需要：
+1. 在 Google Cloud Console 创建项目
+2. 配置 OAuth 2.0 客户端 ID
+3. 实现后端 API 验证 token
+4. 替换模拟代码为真实 Google OAuth 流程
+
+## 📦 订单管理功能
+
+### 订单功能
+
+- ✅ **订单创建**：结算时自动创建订单
+- ✅ **订单查询**：在用户中心查看所有订单
+- ✅ **订单详情**：查看订单完整信息
+- ✅ **订单状态**：待支付、已支付、处理中、已发货、已送达、已取消
+
+### 快递进度查询
+
+- ✅ **快递单号**：订单发货后显示快递单号
+- ✅ **物流跟踪**：查看快递实时状态
+- ✅ **物流更新**：显示物流轨迹和时间节点
+- ✅ **快递状态**：待发货、运输中、派送中、已送达
+
+### 订单数据
+
+订单数据保存在 localStorage 中，包含：
+- 订单基本信息（ID、时间、状态）
+- 商品列表
+- 收货信息
+- 支付信息
+- 快递跟踪信息
 
 ## 💳 支付功能
 

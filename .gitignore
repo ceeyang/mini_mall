@@ -35,3 +35,11 @@ out/
 *.tmp
 *.temp
 .cache/
+
+# 后端相关
+backend/node_modules/
+backend/.env
+backend/dist/
+backend/build/
+backend/logs/
+backend/*.log

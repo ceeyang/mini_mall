@@ -20,7 +20,7 @@ function initApp() {
   // 渲染所有组件
   const navbarContainer = document.getElementById('navbar-container');
   if (navbarContainer) {
-    navbarContainer.innerHTML = renderNavbar();
+    navbarContainer.innerHTML = renderNavbar('index');
     initNavbar();
   }
 
@@ -60,7 +60,7 @@ function initApp() {
   cartManager.onCartChange(() => {
     const navbarContainer = document.getElementById('navbar-container');
     if (navbarContainer) {
-      navbarContainer.innerHTML = renderNavbar();
+      navbarContainer.innerHTML = renderNavbar('index');
       initNavbar();
     }
   });

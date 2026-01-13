@@ -40,6 +40,8 @@
 cd /Users/cee/Desktop/github/mini_mall
 ```
 
+**注意**：项目已重构，前端代码在 `frontend/` 目录下。
+
 2. **检查 Git 状态**：
 ```bash
 git status
@@ -232,7 +234,7 @@ A: 在 Vercel 项目页面 → Deployments → 选择之前的版本 → "Promot
 3. **配置构建设置**：
    - **Branch to deploy**: `main`
    - **Build command**: 留空
-   - **Publish directory**: `.`
+   - **Publish directory**: `frontend`
 
 4. **部署**：
    - 点击 "Deploy site"

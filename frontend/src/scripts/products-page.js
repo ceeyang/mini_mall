@@ -16,7 +16,7 @@ function initProductsPage() {
   // 渲染导航栏
   const navbarContainer = document.getElementById('navbar-container');
   if (navbarContainer) {
-    navbarContainer.innerHTML = renderNavbar();
+    navbarContainer.innerHTML = renderNavbar('pages');
     initNavbar();
   }
 

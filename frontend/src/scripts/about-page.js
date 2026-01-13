@@ -1,29 +1,29 @@
 /**
- * 联系我们页面入口文件
- * 初始化联系我们页面的所有组件
+ * 关于我们页面入口文件
+ * 初始化关于我们页面的所有组件
  */
 
 import { renderNavbar, initNavbar } from '../components/navbar.js';
-import { renderContact } from '../components/contact.js';
+import { renderAbout } from '../components/about.js';
 import { renderFooter } from '../components/footer.js';
 import { initUI } from './ui.js';
 import { cartManager } from './cart.js';
 
 /**
- * 初始化联系我们页面
+ * 初始化关于我们页面
  */
-function initContactPage() {
+function initAboutPage() {
   // 渲染导航栏
   const navbarContainer = document.getElementById('navbar-container');
   if (navbarContainer) {
-    navbarContainer.innerHTML = renderNavbar();
+    navbarContainer.innerHTML = renderNavbar('pages');
     initNavbar();
   }
 
-  // 渲染联系我们内容（独立页面版本）
-  const contactContainer = document.getElementById('contact-container');
-  if (contactContainer) {
-    contactContainer.innerHTML = renderContact(true);
+  // 渲染关于我们内容（独立页面版本）
+  const aboutContainer = document.getElementById('about-container');
+  if (aboutContainer) {
+    aboutContainer.innerHTML = renderAbout(true);
   }
 
   // 渲染页脚
@@ -47,7 +47,7 @@ function initContactPage() {
 
 // DOM 加载完成后初始化
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initContactPage);
+  document.addEventListener('DOMContentLoaded', initAboutPage);
 } else {
-  initContactPage();
+  initAboutPage();
 }

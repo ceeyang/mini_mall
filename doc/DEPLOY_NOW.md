@@ -85,7 +85,7 @@ git push -u origin main
 4. **配置构建设置**：
    - Branch to deploy: `main`
    - Build command: **留空**
-   - Publish directory: `.`
+   - Publish directory: `frontend`
 5. **部署**：
    - 点击 "Deploy site"
    - 等待部署完成
@@ -123,11 +123,12 @@ git push -u origin main
 
 ```bash
 # 方法 1: 使用 Python
-cd /Users/cee/Desktop/github/mini_mall
+cd /Users/cee/Desktop/github/mini_mall/frontend
 python3 -m http.server 8000
 # 然后访问 http://localhost:8000
 
 # 方法 2: 使用 serve
+cd frontend
 npm install
 npm run dev
 # 然后访问 http://localhost:3000

@@ -74,7 +74,7 @@ export function renderAbout(isStandalonePage = false) {
           Mini Mall 是一个专注于提供高品质商品的独立购物平台。我们致力于为每一位顾客带来卓越的购物体验，
           精选优质商品，确保每一件产品都经过严格的质量把控。
         </p>
-        <a href="about.html" class="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-200 cursor-pointer font-medium shadow-lg">
+        <a href="src/pages/about.html" class="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-200 cursor-pointer font-medium shadow-lg">
           了解更多 →
         </a>
       </div>

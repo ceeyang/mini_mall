@@ -156,7 +156,7 @@ export function renderContact(isStandalonePage = false) {
           </button>
         </form>
         <div class="mt-6 text-center">
-          <a href="contact.html" class="text-indigo-600 hover:text-indigo-700 transition-colors duration-200 cursor-pointer font-medium">
+          <a href="src/pages/contact.html" class="text-indigo-600 hover:text-indigo-700 transition-colors duration-200 cursor-pointer font-medium">
             查看完整联系方式 →
           </a>
         </div>

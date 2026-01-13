@@ -1,10 +1,10 @@
 {
-  "name": "mini-mall",
+  "name": "mini-mall-frontend",
   "version": "1.0.0",
-  "description": "Mini Mall - 精品购物独立站最小单元",
+  "description": "Mini Mall - 前端代码",
   "main": "index.html",
   "scripts": {
-    "dev": "npx serve .",
+    "dev": "npx serve . -p 3000",
     "build": "echo '静态站点，无需构建'",
     "start": "npx serve . -p 3000"
   },
@@ -12,7 +12,8 @@
     "ecommerce",
     "mall",
     "shopping",
-    "独立站"
+    "独立站",
+    "frontend"
   ],
   "author": "",
   "license": "MIT",

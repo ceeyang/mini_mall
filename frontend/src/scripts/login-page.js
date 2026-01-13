@@ -1,30 +1,37 @@
 /**
- * 购物车页面入口文件
- * 初始化购物车页面的所有组件
+ * 登录页面入口文件
+ * 初始化登录页面的所有组件
  */
 
 import { renderNavbar, initNavbar } from '../components/navbar.js';
-import { renderCart, initCart } from '../components/cart.js';
+import { renderLogin, initLogin } from '../components/login.js';
 import { renderFooter } from '../components/footer.js';
 import { initUI } from './ui.js';
 import { cartManager } from './cart.js';
+import { authManager } from './auth.js';
 
 /**
- * 初始化购物车页面
+ * 初始化登录页面
  */
-function initCartPage() {
+function initLoginPage() {
+  // 如果已登录，跳转到用户中心
+  if (authManager.isAuthenticated()) {
+    window.location.href = 'user-center.html';
+    return;
+  }
+
   // 渲染导航栏
   const navbarContainer = document.getElementById('navbar-container');
   if (navbarContainer) {
-    navbarContainer.innerHTML = renderNavbar();
+    navbarContainer.innerHTML = renderNavbar('pages');
     initNavbar();
   }
 
-  // 渲染购物车
-  const cartContainer = document.getElementById('cart-container');
-  if (cartContainer) {
-    cartContainer.innerHTML = renderCart();
-    initCart();
+  // 渲染登录组件
+  const loginContainer = document.getElementById('login-container');
+  if (loginContainer) {
+    loginContainer.innerHTML = renderLogin(true);
+    initLogin();
   }
 
   // 渲染页脚
@@ -36,16 +43,8 @@ function initCartPage() {
   // 初始化 UI 功能
   initUI();
 
-  // 监听购物车变化，更新购物车显示和导航栏
+  // 监听购物车变化，更新导航栏购物车数量
   cartManager.onCartChange(() => {
-    // 更新购物车显示
-    const cartContainer = document.getElementById('cart-container');
-    if (cartContainer) {
-      cartContainer.innerHTML = renderCart();
-      initCart();
-    }
-
-    // 更新导航栏
     const navbarContainer = document.getElementById('navbar-container');
     if (navbarContainer) {
       navbarContainer.innerHTML = renderNavbar();
@@ -56,7 +55,7 @@ function initCartPage() {
 
 // DOM 加载完成后初始化
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initCartPage);
+  document.addEventListener('DOMContentLoaded', initLoginPage);
 } else {
-  initCartPage();
+  initLoginPage();
 }

@@ -57,7 +57,7 @@ export function renderProducts(limit = null) {
       </div>
       ${showMoreButton ? `
         <div class="text-center mt-12">
-          <a href="products.html" class="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-200 cursor-pointer font-medium shadow-lg">
+          <a href="src/pages/products.html" class="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-200 cursor-pointer font-medium shadow-lg">
             查看更多商品 →
           </a>
         </div>

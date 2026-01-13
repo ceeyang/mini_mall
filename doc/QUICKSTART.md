@@ -16,6 +16,8 @@ git add .
 git commit -m "Initial commit"
 ```
 
+**注意**：前端代码在 `frontend/` 目录下。
+
 ### 2. 推送到 GitHub（1 分钟）
 
 1. 在 GitHub 创建新仓库：https://github.com/new
@@ -49,6 +51,9 @@ git push -u origin main
 在部署前，可以先在本地预览：
 
 ```bash
+# 进入前端目录
+cd frontend
+
 # 方法 1: 使用 serve（需要 Node.js）
 npm install
 npm run dev

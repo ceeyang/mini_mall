@@ -6,6 +6,8 @@
 import { cartManager } from '../scripts/cart.js';
 import { showNotification } from '../scripts/ui.js';
 import { paymentService } from '../scripts/payment.js';
+import { orderManager } from '../scripts/orders.js';
+import { authManager } from '../scripts/auth.js';
 
 /**
  * 生成订单摘要 HTML
@@ -71,6 +73,24 @@ function renderOrderSummary() {
  * @returns {string} 结算区域 HTML 字符串
  */
 export function renderCheckout() {
+  // 检查是否已登录
+  if (!authManager.isAuthenticated()) {
+    return `
+      <section id="checkout" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div class="bg-white rounded-2xl shadow-lg p-12 text-center border border-gray-200">
+          <svg class="w-24 h-24 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+          </svg>
+          <h2 class="text-2xl font-bold text-gray-900 mb-2">请先登录</h2>
+          <p class="text-gray-600 mb-6">登录后即可进行结算</p>
+          <a href="login.html?return=checkout.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-200 cursor-pointer font-medium">
+            立即登录
+          </a>
+        </div>
+      </section>
+    `;
+  }
+
   if (cartManager.isEmpty()) {
     return `
       <section id="checkout" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -300,16 +320,24 @@ async function handleOrderSubmit() {
     const result = await paymentService.processPayment(order, paymentMethod);
     
     if (result.success) {
-      // 支付成功
-      showNotification('订单提交成功！', 'success');
-      
-      // 清空购物车
-      cartManager.clearCart();
-      
-      // 跳转到订单成功页面（可以后续添加）
-      setTimeout(() => {
-        window.location.href = 'index.html';
-      }, 2000);
+      // 支付成功，创建订单
+      try {
+        const createdOrder = orderManager.createOrder(order);
+        showNotification('订单提交成功！', 'success');
+        
+        // 清空购物车
+        cartManager.clearCart();
+        
+        // 跳转到用户中心查看订单
+        setTimeout(() => {
+          window.location.href = 'user-center.html';
+        }, 2000);
+      } catch (error) {
+        console.error('创建订单错误:', error);
+        showNotification('订单创建失败，请联系客服', 'error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
     } else {
       // 支付失败
       showNotification(result.message || '支付失败，请重试', 'error');
