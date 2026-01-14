@@ -20,7 +20,7 @@ import { requestLogger } from './middleware/logger.js';
 // 环境变量已在 env-loader.js 中加载
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3030;
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:8080';
 
 // 连接数据库
@@ -37,17 +37,17 @@ app.use(cors({
     if (!origin) {
       return callback(null, true);
     }
-    
+
     // 允许配置的前端地址
     if (origin === FRONTEND_URL) {
       return callback(null, true);
     }
-    
+
     // 开发环境：允许 localhost 的任意端口（方便调试）
     if (process.env.NODE_ENV === 'development' && origin.startsWith('http://localhost:')) {
       return callback(null, true);
     }
-    
+
     // 其他情况拒绝
     callback(new Error('不允许的跨域请求'));
   },
@@ -61,8 +61,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // 健康检查路由
 app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'ok', 
+  res.json({
+    status: 'ok',
     message: 'Mini Mall Backend API is running',
     timestamp: new Date().toISOString()
   });
@@ -78,9 +78,9 @@ app.use('/api/contact', contactRoutes);
 
 // 404 处理
 app.use((req, res) => {
-  res.status(404).json({ 
-    success: false, 
-    message: '路由不存在' 
+  res.status(404).json({
+    success: false,
+    message: '路由不存在'
   });
 });
 

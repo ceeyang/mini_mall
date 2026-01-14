@@ -43,3 +43,6 @@ backend/dist/
 backend/build/
 backend/logs/
 backend/*.log
+
+.frontend.pid
+.backend.pid
