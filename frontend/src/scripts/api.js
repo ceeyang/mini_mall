@@ -117,7 +117,14 @@ export async function apiRequest(endpoint, options = {}) {
  * @returns {Promise<Object>} API 响应数据
  */
 export async function apiGet(endpoint, params = {}) {
-  const queryString = new URLSearchParams(params).toString();
+  // 过滤掉 undefined、null、空字符串等无效值
+  const validParams = {};
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== null && value !== '' && value !== 'undefined' && value !== 'null') {
+      validParams[key] = value;
+    }
+  }
+  const queryString = new URLSearchParams(validParams).toString();
   const url = queryString ? `${endpoint}?${queryString}` : endpoint;
   return apiRequest(url, { method: 'GET' });
 }

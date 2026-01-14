@@ -66,7 +66,7 @@ function initUserCenterPage() {
     // 更新导航栏
     const navbarContainer = document.getElementById('navbar-container');
     if (navbarContainer) {
-      navbarContainer.innerHTML = renderNavbar();
+      navbarContainer.innerHTML = renderNavbar('pages');
       initNavbar();
     }
   });
@@ -78,7 +78,7 @@ function initUserCenterPage() {
   cartManager.onCartChange(() => {
     const navbarContainer = document.getElementById('navbar-container');
     if (navbarContainer) {
-      navbarContainer.innerHTML = renderNavbar();
+      navbarContainer.innerHTML = renderNavbar('pages');
       initNavbar();
     }
   });

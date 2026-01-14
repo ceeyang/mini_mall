@@ -1,0 +1,332 @@
+[
+  {
+    "name": "iPhone 15 Pro",
+    "description": "采用钛金属设计，配备 A17 Pro 芯片，支持 ProRes 视频录制，专业级摄影体验",
+    "price": 7999,
+    "category": "电子产品",
+    "stock": 50,
+    "image": {
+      "gradient": "from-indigo-400 to-purple-500",
+      "url": "https://example.com/images/iphone15pro.jpg"
+    },
+    "dateAdded": "2024-01-15T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-01-15T00:00:00.000Z",
+    "updatedAt": "2024-01-15T00:00:00.000Z"
+  },
+  {
+    "name": "MacBook Pro 14英寸",
+    "description": "M3 芯片，14.2 英寸 Liquid Retina XDR 显示屏，专业级性能，适合创意工作者",
+    "price": 14999,
+    "category": "电子产品",
+    "stock": 30,
+    "image": {
+      "gradient": "from-blue-400 to-indigo-500",
+      "url": "https://example.com/images/macbookpro14.jpg"
+    },
+    "dateAdded": "2024-01-20T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-01-20T00:00:00.000Z",
+    "updatedAt": "2024-01-20T00:00:00.000Z"
+  },
+  {
+    "name": "AirPods Pro 2",
+    "description": "主动降噪，空间音频，MagSafe 充电盒，最长 30 小时电池续航",
+    "price": 1899,
+    "category": "电子产品",
+    "stock": 100,
+    "image": {
+      "gradient": "from-gray-400 to-gray-500",
+      "url": "https://example.com/images/airpodspro2.jpg"
+    },
+    "dateAdded": "2024-01-25T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-01-25T00:00:00.000Z",
+    "updatedAt": "2024-01-25T00:00:00.000Z"
+  },
+  {
+    "name": "iPad Air",
+    "description": "M2 芯片，10.9 英寸 Liquid Retina 显示屏，支持 Apple Pencil，轻薄便携",
+    "price": 4399,
+    "category": "电子产品",
+    "stock": 60,
+    "image": {
+      "gradient": "from-pink-400 to-rose-500",
+      "url": "https://example.com/images/ipadair.jpg"
+    },
+    "dateAdded": "2024-02-01T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-02-01T00:00:00.000Z",
+    "updatedAt": "2024-02-01T00:00:00.000Z"
+  },
+  {
+    "name": "智能扫地机器人",
+    "description": "激光导航，自动回充，APP 远程控制，大容量尘盒，适合 120㎡ 以下户型",
+    "price": 1999,
+    "category": "家居用品",
+    "stock": 80,
+    "image": {
+      "gradient": "from-pink-400 to-red-500",
+      "url": "https://example.com/images/robotvacuum.jpg"
+    },
+    "dateAdded": "2024-02-05T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-02-05T00:00:00.000Z",
+    "updatedAt": "2024-02-05T00:00:00.000Z"
+  },
+  {
+    "name": "北欧风格沙发",
+    "description": "简约现代设计，优质布艺面料，舒适坐感，适合客厅使用，多色可选",
+    "price": 3999,
+    "category": "家居用品",
+    "stock": 25,
+    "image": {
+      "gradient": "from-amber-400 to-orange-500",
+      "url": "https://example.com/images/sofa.jpg"
+    },
+    "dateAdded": "2024-02-10T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-02-10T00:00:00.000Z",
+    "updatedAt": "2024-02-10T00:00:00.000Z"
+  },
+  {
+    "name": "智能空气净化器",
+    "description": "HEPA 高效滤网，CADR 值 500m³/h，PM2.5 实时监测，静音运行",
+    "price": 2999,
+    "category": "家居用品",
+    "stock": 40,
+    "image": {
+      "gradient": "from-cyan-400 to-blue-500",
+      "url": "https://example.com/images/airpurifier.jpg"
+    },
+    "dateAdded": "2024-02-15T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-02-15T00:00:00.000Z",
+    "updatedAt": "2024-02-15T00:00:00.000Z"
+  },
+  {
+    "name": "实木餐桌椅组合",
+    "description": "天然橡木材质，环保健康，一桌四椅，适合 4-6 人用餐，简约设计",
+    "price": 5999,
+    "category": "家居用品",
+    "stock": 15,
+    "image": {
+      "gradient": "from-yellow-400 to-orange-500",
+      "url": "https://example.com/images/diningtable.jpg"
+    },
+    "dateAdded": "2024-02-20T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-02-20T00:00:00.000Z",
+    "updatedAt": "2024-02-20T00:00:00.000Z"
+  },
+  {
+    "name": "时尚运动鞋",
+    "description": "透气网面设计，缓震科技，舒适贴合，适合日常运动和休闲穿着",
+    "price": 599,
+    "category": "服装配饰",
+    "stock": 120,
+    "image": {
+      "gradient": "from-green-400 to-blue-500",
+      "url": "https://example.com/images/sneakers.jpg"
+    },
+    "dateAdded": "2024-03-01T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-03-01T00:00:00.000Z",
+    "updatedAt": "2024-03-01T00:00:00.000Z"
+  },
+  {
+    "name": "经典款双肩包",
+    "description": "防水尼龙材质，多隔层设计，大容量，适合商务和旅行使用",
+    "price": 399,
+    "category": "服装配饰",
+    "stock": 90,
+    "image": {
+      "gradient": "from-purple-400 to-pink-500",
+      "url": "https://example.com/images/backpack.jpg"
+    },
+    "dateAdded": "2024-03-05T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-03-05T00:00:00.000Z",
+    "updatedAt": "2024-03-05T00:00:00.000Z"
+  },
+  {
+    "name": "智能手表",
+    "description": "健康监测，运动追踪，消息通知，GPS 定位，长续航，支持多种运动模式",
+    "price": 1299,
+    "category": "电子产品",
+    "stock": 70,
+    "image": {
+      "gradient": "from-teal-400 to-cyan-500",
+      "url": "https://example.com/images/smartwatch.jpg"
+    },
+    "dateAdded": "2024-03-10T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-03-10T00:00:00.000Z",
+    "updatedAt": "2024-03-10T00:00:00.000Z"
+  },
+  {
+    "name": "无线机械键盘",
+    "description": "Cherry MX 轴体，RGB 背光，蓝牙/有线双模，适合游戏和办公",
+    "price": 899,
+    "category": "电子产品",
+    "stock": 55,
+    "image": {
+      "gradient": "from-indigo-400 to-purple-500",
+      "url": "https://example.com/images/keyboard.jpg"
+    },
+    "dateAdded": "2024-03-15T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-03-15T00:00:00.000Z",
+    "updatedAt": "2024-03-15T00:00:00.000Z"
+  },
+  {
+    "name": "4K 显示器",
+    "description": "27 英寸 4K UHD，IPS 面板，99% sRGB 色域，适合设计和视频编辑",
+    "price": 2499,
+    "category": "电子产品",
+    "stock": 35,
+    "image": {
+      "gradient": "from-blue-400 to-indigo-500",
+      "url": "https://example.com/images/monitor.jpg"
+    },
+    "dateAdded": "2024-03-20T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-03-20T00:00:00.000Z",
+    "updatedAt": "2024-03-20T00:00:00.000Z"
+  },
+  {
+    "name": "真丝围巾",
+    "description": "100% 桑蚕丝，柔软亲肤，多色可选，适合春秋季节，优雅百搭",
+    "price": 299,
+    "category": "服装配饰",
+    "stock": 150,
+    "image": {
+      "gradient": "from-rose-400 to-pink-500",
+      "url": "https://example.com/images/scarf.jpg"
+    },
+    "dateAdded": "2024-03-25T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-03-25T00:00:00.000Z",
+    "updatedAt": "2024-03-25T00:00:00.000Z"
+  },
+  {
+    "name": "设计师款太阳镜",
+    "description": "UV400 防紫外线，偏光镜片，时尚设计，适合户外和驾驶使用",
+    "price": 399,
+    "category": "服装配饰",
+    "stock": 80,
+    "image": {
+      "gradient": "from-gray-400 to-gray-500",
+      "url": "https://example.com/images/sunglasses.jpg"
+    },
+    "dateAdded": "2024-04-01T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-04-01T00:00:00.000Z",
+    "updatedAt": "2024-04-01T00:00:00.000Z"
+  },
+  {
+    "name": "记忆棉床垫",
+    "description": "慢回弹记忆棉，贴合身体曲线，透气舒适，适合改善睡眠质量",
+    "price": 4999,
+    "category": "家居用品",
+    "stock": 20,
+    "image": {
+      "gradient": "from-purple-400 to-pink-500",
+      "url": "https://example.com/images/mattress.jpg"
+    },
+    "dateAdded": "2024-04-05T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-04-05T00:00:00.000Z",
+    "updatedAt": "2024-04-05T00:00:00.000Z"
+  },
+  {
+    "name": "蓝牙音箱",
+    "description": "360° 环绕音效，IPX7 防水，20 小时续航，支持 TWS 双机配对",
+    "price": 699,
+    "category": "电子产品",
+    "stock": 65,
+    "image": {
+      "gradient": "from-orange-400 to-red-500",
+      "url": "https://example.com/images/speaker.jpg"
+    },
+    "dateAdded": "2024-04-10T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-04-10T00:00:00.000Z",
+    "updatedAt": "2024-04-10T00:00:00.000Z"
+  },
+  {
+    "name": "咖啡机",
+    "description": "全自动意式咖啡机，15Bar 压力，奶泡系统，适合家庭和办公室使用",
+    "price": 3999,
+    "category": "家居用品",
+    "stock": 30,
+    "image": {
+      "gradient": "from-amber-400 to-yellow-500",
+      "url": "https://example.com/images/coffeemaker.jpg"
+    },
+    "dateAdded": "2024-04-15T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-04-15T00:00:00.000Z",
+    "updatedAt": "2024-04-15T00:00:00.000Z"
+  },
+  {
+    "name": "运动耳机",
+    "description": "入耳式设计，防汗防水，磁吸收纳，长续航，适合运动和通勤",
+    "price": 299,
+    "category": "电子产品",
+    "stock": 110,
+    "image": {
+      "gradient": "from-green-400 to-emerald-500",
+      "url": "https://example.com/images/earphones.jpg"
+    },
+    "dateAdded": "2024-04-20T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-04-20T00:00:00.000Z",
+    "updatedAt": "2024-04-20T00:00:00.000Z"
+  },
+  {
+    "name": "羊毛大衣",
+    "description": "100% 羊毛材质，经典版型，保暖舒适，适合秋冬季节，多色可选",
+    "price": 1999,
+    "category": "服装配饰",
+    "stock": 45,
+    "image": {
+      "gradient": "from-gray-400 to-slate-500",
+      "url": "https://example.com/images/coat.jpg"
+    },
+    "dateAdded": "2024-04-25T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-04-25T00:00:00.000Z",
+    "updatedAt": "2024-04-25T00:00:00.000Z"
+  },
+  {
+    "name": "智能台灯",
+    "description": "护眼无频闪，多档调光调色，APP 控制，定时开关，适合学习和办公",
+    "price": 399,
+    "category": "家居用品",
+    "stock": 95,
+    "image": {
+      "gradient": "from-yellow-400 to-amber-500",
+      "url": "https://example.com/images/lamp.jpg"
+    },
+    "dateAdded": "2024-05-01T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-05-01T00:00:00.000Z",
+    "updatedAt": "2024-05-01T00:00:00.000Z"
+  },
+  {
+    "name": "便携充电宝",
+    "description": "20000mAh 大容量，支持快充，双 USB 输出，适合手机和平板充电",
+    "price": 199,
+    "category": "电子产品",
+    "stock": 200,
+    "image": {
+      "gradient": "from-red-400 to-pink-500",
+      "url": "https://example.com/images/powerbank.jpg"
+    },
+    "dateAdded": "2024-05-05T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-05-05T00:00:00.000Z",
+    "updatedAt": "2024-05-05T00:00:00.000Z"
+  }
+]

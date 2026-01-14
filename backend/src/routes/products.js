@@ -26,8 +26,13 @@ router.get('/', [
 
   // 构建查询条件
   const query = { isActive: true };
-  if (category && category !== '全部') {
-    query.category = category;
+  // 过滤掉无效的分类值：undefined、null、空字符串、"全部"、"undefined"、"null"
+  if (category && 
+      category !== '全部' && 
+      category !== 'undefined' && 
+      category !== 'null' && 
+      category.trim() !== '') {
+    query.category = category.trim();
   }
 
   // 构建排序

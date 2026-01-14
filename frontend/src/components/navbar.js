@@ -258,7 +258,9 @@ export function initNavbar() {
     const navbarContainer = document.getElementById('navbar-container');
     if (navbarContainer) {
       // 检测当前页面类型
-      const isIndexPage = window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/');
+      const isIndexPage = window.location.pathname.includes('index.html') || 
+                         window.location.pathname.endsWith('/') ||
+                         window.location.pathname === '/';
       const currentPage = isIndexPage ? 'index' : 'pages';
       navbarContainer.innerHTML = renderNavbar(currentPage);
       initNavbar();

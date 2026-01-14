@@ -91,7 +91,7 @@ function initProductsPage() {
   cartManager.onCartChange(() => {
     const navbarContainer = document.getElementById('navbar-container');
     if (navbarContainer) {
-      navbarContainer.innerHTML = renderNavbar();
+      navbarContainer.innerHTML = renderNavbar('pages');
       initNavbar();
     }
   });

@@ -125,8 +125,8 @@ const orderSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// 生成订单号（保存前）
-orderSchema.pre('save', async function(next) {
+// 生成订单号（验证前，确保在 required 验证之前生成）
+orderSchema.pre('validate', function(next) {
   if (!this.orderNumber) {
     // 生成订单号：日期 + 随机数
     const date = new Date();

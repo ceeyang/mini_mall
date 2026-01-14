@@ -3,12 +3,12 @@
  * 初始化登录页面的所有组件
  */
 
-import { renderNavbar, initNavbar } from '../components/navbar.js';
-import { renderLogin, initLogin } from '../components/login.js';
 import { renderFooter } from '../components/footer.js';
-import { initUI } from './ui.js';
-import { cartManager } from './cart.js';
+import { initLogin, renderLogin } from '../components/login.js';
+import { initNavbar, renderNavbar } from '../components/navbar.js';
 import { authManager } from './auth.js';
+import { cartManager } from './cart.js';
+import { initUI } from './ui.js';
 
 /**
  * 初始化登录页面
@@ -47,7 +47,7 @@ function initLoginPage() {
   cartManager.onCartChange(() => {
     const navbarContainer = document.getElementById('navbar-container');
     if (navbarContainer) {
-      navbarContainer.innerHTML = renderNavbar();
+      navbarContainer.innerHTML = renderNavbar('pages');
       initNavbar();
     }
   });

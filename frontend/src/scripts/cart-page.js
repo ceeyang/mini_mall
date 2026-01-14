@@ -45,10 +45,10 @@ function initCartPage() {
       initCart();
     }
 
-    // 更新导航栏
+    // 更新导航栏（传递 'pages' 参数，因为购物车页面在 src/pages/ 目录下）
     const navbarContainer = document.getElementById('navbar-container');
     if (navbarContainer) {
-      navbarContainer.innerHTML = renderNavbar();
+      navbarContainer.innerHTML = renderNavbar('pages');
       initNavbar();
     }
   });
