@@ -4,7 +4,7 @@
  */
 
 import { authManager } from '../scripts/auth.js';
-import { orderManager } from '../scripts/orders.js';
+import { ordersAPI } from '../scripts/orders-api.js';
 import { showNotification } from '../scripts/ui.js';
 import { showConfirm } from '../scripts/modal.js';
 
@@ -58,54 +58,67 @@ function renderOrderCard(order) {
     minute: '2-digit'
   });
 
-  const itemsSummary = order.items.map(item => item.name).join('、');
-  const hasTracking = order.tracking && order.tracking.number;
+  // 处理订单项（可能是对象ID或完整对象）
+  const items = order.items || [];
+  const itemsSummary = items.map(item => {
+    const itemName = typeof item === 'object' && item.productId 
+      ? (typeof item.productId === 'object' ? item.productId.name : item.name || '商品')
+      : (item.name || '商品');
+    return itemName;
+  }).join('、');
+  
+  const totalQuantity = items.reduce((sum, item) => sum + (item.quantity || 0), 0);
+  const hasTracking = order.trackingNumber;
+  const orderId = order._id || order.id;
+  const orderNumber = order.orderNumber || orderId;
 
   return `
     <div class="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden">
       <div class="p-6">
         <div class="flex items-start justify-between mb-4">
           <div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-1">订单号：${order.id}</h3>
+            <h3 class="text-lg font-semibold text-gray-900 mb-1">订单号：${orderNumber}</h3>
             <p class="text-sm text-gray-600">${orderDate}</p>
           </div>
           ${renderOrderStatus(order.status)}
         </div>
 
         <div class="mb-4">
-          <p class="text-sm text-gray-600 mb-2">商品：${itemsSummary}</p>
-          <p class="text-sm text-gray-600">共 ${order.items.reduce((sum, item) => sum + item.quantity, 0)} 件商品</p>
+          <p class="text-sm text-gray-600 mb-2">商品：${itemsSummary || '暂无商品信息'}</p>
+          <p class="text-sm text-gray-600">共 ${totalQuantity} 件商品</p>
         </div>
 
         ${hasTracking ? `
           <div class="mb-4 p-3 bg-gray-50 rounded-lg">
             <div class="flex items-center justify-between mb-2">
               <span class="text-sm font-medium text-gray-700">快递单号：</span>
-              <span class="text-sm text-gray-900 font-mono">${order.tracking.number}</span>
+              <span class="text-sm text-gray-900 font-mono">${order.trackingNumber}</span>
             </div>
-            <div class="flex items-center justify-between">
-              <span class="text-sm font-medium text-gray-700">快递状态：</span>
-              ${renderTrackingStatus(order.tracking.status)}
-            </div>
+            ${order.expressCompany ? `
+              <div class="flex items-center justify-between">
+                <span class="text-sm font-medium text-gray-700">快递公司：</span>
+                <span class="text-sm text-gray-900">${order.expressCompany}</span>
+              </div>
+            ` : ''}
           </div>
         ` : ''}
 
         <div class="flex items-center justify-between pt-4 border-t border-gray-200">
           <div>
             <span class="text-sm text-gray-600">总计：</span>
-            <span class="text-xl font-bold text-indigo-600 ml-2">¥${order.total}</span>
+            <span class="text-xl font-bold text-indigo-600 ml-2">¥${order.total || 0}</span>
           </div>
           <div class="flex space-x-2">
             ${hasTracking ? `
               <button 
                 class="view-tracking-btn px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200 cursor-pointer text-sm font-medium"
-                data-order-id="${order.id}">
+                data-order-id="${orderId}">
                 查看物流
               </button>
             ` : ''}
             <button 
               class="view-order-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-200 cursor-pointer text-sm font-medium"
-              data-order-id="${order.id}">
+              data-order-id="${orderId}">
               查看详情
             </button>
           </div>
@@ -117,9 +130,9 @@ function renderOrderCard(order) {
 
 /**
  * 生成用户中心 HTML
- * @returns {string} 用户中心 HTML 字符串
+ * @returns {Promise<string>} 用户中心 HTML 字符串
  */
-export function renderUserCenter() {
+export async function renderUserCenter() {
   const user = authManager.getCurrentUser();
   
   if (!user) {
@@ -139,7 +152,15 @@ export function renderUserCenter() {
     `;
   }
 
-  const orders = orderManager.getUserOrders(user.id);
+  // 从后端 API 获取订单列表
+  let orders = [];
+  try {
+    const result = await ordersAPI.getOrders({ page: 1, limit: 20 });
+    orders = result.orders || [];
+  } catch (error) {
+    console.error('获取订单列表失败:', error);
+  }
+
   const ordersHTML = orders.length > 0 
     ? orders.map(order => renderOrderCard(order)).join('')
     : `
@@ -209,15 +230,29 @@ function renderOrderDetail(order) {
     minute: '2-digit'
   });
 
-  const itemsHTML = order.items.map(item => `
-    <div class="flex items-center justify-between py-3 border-b border-gray-200">
-      <div class="flex-1">
-        <h4 class="font-semibold text-gray-900">${item.name}</h4>
-        <p class="text-sm text-gray-600">¥${item.price} × ${item.quantity}</p>
+  // 处理订单项（可能是对象ID或完整对象）
+  const items = order.items || [];
+  const itemsHTML = items.map(item => {
+    // 处理 productId 可能是对象的情况
+    const itemName = typeof item.productId === 'object' && item.productId 
+      ? (item.productId.name || item.name || '商品')
+      : (item.name || '商品');
+    const itemPrice = item.price || 0;
+    const itemQuantity = item.quantity || 0;
+    
+    return `
+      <div class="flex items-center justify-between py-3 border-b border-gray-200">
+        <div class="flex-1">
+          <h4 class="font-semibold text-gray-900">${itemName}</h4>
+          <p class="text-sm text-gray-600">¥${itemPrice} × ${itemQuantity}</p>
+        </div>
+        <span class="font-bold text-gray-900">¥${itemPrice * itemQuantity}</span>
       </div>
-      <span class="font-bold text-gray-900">¥${item.price * item.quantity}</span>
-    </div>
-  `).join('');
+    `;
+  }).join('');
+
+  // 处理订单号（使用 orderNumber 或 _id）
+  const orderNumber = order.orderNumber || order._id || order.id;
 
   return `
     <div id="order-detail-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
@@ -237,33 +272,45 @@ function renderOrderDetail(order) {
           <div>
             <h4 class="font-semibold text-gray-900 mb-2">订单信息</h4>
             <div class="space-y-1 text-sm text-gray-600">
-              <p>订单号：${order.id}</p>
+              <p>订单号：${orderNumber}</p>
               <p>下单时间：${orderDate}</p>
               <p>订单状态：${renderOrderStatus(order.status)}</p>
+              ${order.paymentStatus ? `<p>支付状态：${order.paymentStatus === 'paid' ? '已支付' : order.paymentStatus === 'pending' ? '待支付' : '未支付'}</p>` : ''}
             </div>
           </div>
 
           <div>
             <h4 class="font-semibold text-gray-900 mb-2">商品列表</h4>
             <div class="space-y-2">
-              ${itemsHTML}
+              ${itemsHTML || '<p class="text-gray-600">暂无商品信息</p>'}
             </div>
           </div>
 
           <div>
             <h4 class="font-semibold text-gray-900 mb-2">收货信息</h4>
             <div class="text-sm text-gray-600 space-y-1">
-              <p>${order.shipping.name}</p>
-              <p>${order.shipping.phone}</p>
-              <p>${order.shipping.province} ${order.shipping.city}</p>
-              <p>${order.shipping.address}</p>
+              <p>${order.shipping?.name || ''}</p>
+              <p>${order.shipping?.phone || ''}</p>
+              <p>${order.shipping?.province || ''} ${order.shipping?.city || ''}</p>
+              <p>${order.shipping?.address || ''}</p>
+              ${order.shipping?.postalCode ? `<p>邮编：${order.shipping.postalCode}</p>` : ''}
             </div>
           </div>
 
           <div class="border-t border-gray-200 pt-4">
-            <div class="flex justify-between text-lg font-bold text-gray-900">
-              <span>总计：</span>
-              <span class="text-indigo-600">¥${order.total}</span>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm text-gray-600">
+                <span>商品小计：</span>
+                <span>¥${order.subtotal || 0}</span>
+              </div>
+              <div class="flex justify-between text-sm text-gray-600">
+                <span>运费：</span>
+                <span>¥${order.shippingFee || 0}</span>
+              </div>
+              <div class="flex justify-between text-lg font-bold text-gray-900 pt-2 border-t border-gray-200">
+                <span>总计：</span>
+                <span class="text-indigo-600">¥${order.total || 0}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -278,7 +325,9 @@ function renderOrderDetail(order) {
  * @returns {string} 快递进度 HTML
  */
 function renderTrackingModal(trackingInfo) {
-  const updatesHTML = trackingInfo.updates.map((update, index) => {
+  // 处理 timeline 或 updates 字段（后端返回的是 timeline）
+  const updates = trackingInfo.timeline || trackingInfo.updates || [];
+  const updatesHTML = updates.map((update, index) => {
     const updateDate = new Date(update.time).toLocaleDateString('zh-CN', {
       year: 'numeric',
       month: 'long',
@@ -288,13 +337,13 @@ function renderTrackingModal(trackingInfo) {
     });
 
     return `
-      <div class="flex items-start ${index < trackingInfo.updates.length - 1 ? 'pb-6' : ''}">
+      <div class="flex items-start ${index < updates.length - 1 ? 'pb-6' : ''}">
         <div class="flex flex-col items-center mr-4">
           <div class="w-3 h-3 rounded-full ${index === 0 ? 'bg-indigo-600' : 'bg-gray-300'}"></div>
-          ${index < trackingInfo.updates.length - 1 ? '<div class="w-0.5 h-full bg-gray-300 mt-2"></div>' : ''}
+          ${index < updates.length - 1 ? '<div class="w-0.5 h-full bg-gray-300 mt-2"></div>' : ''}
         </div>
         <div class="flex-1">
-          <p class="font-semibold text-gray-900">${update.description || update.status}</p>
+          <p class="font-semibold text-gray-900">${update.description || update.status || '物流更新'}</p>
           ${update.location ? `<p class="text-sm text-gray-600 mt-1">${update.location}</p>` : ''}
           <p class="text-xs text-gray-500 mt-1">${updateDate}</p>
         </div>
@@ -325,14 +374,16 @@ function renderTrackingModal(trackingInfo) {
               </div>
               <div>
                 <span class="text-gray-600">承运商：</span>
-                <span class="font-semibold text-gray-900">${trackingInfo.carrier || '待确认'}</span>
+                <span class="font-semibold text-gray-900">${trackingInfo.expressCompany || trackingInfo.carrier || '待确认'}</span>
               </div>
             </div>
           </div>
 
           <div class="space-y-4">
             <h4 class="font-semibold text-gray-900 mb-4">物流跟踪</h4>
-            ${trackingInfo.updates.length > 0 ? updatesHTML : '<p class="text-gray-600">暂无物流信息</p>'}
+            ${updates.length > 0 ? updatesHTML : '<p class="text-gray-600">暂无物流信息</p>'}
+            ${trackingInfo.statusText ? `<p class="text-sm text-gray-600 mt-2">当前状态：${trackingInfo.statusText}</p>` : ''}
+            ${trackingInfo.currentLocation ? `<p class="text-sm text-gray-600">当前位置：${trackingInfo.currentLocation}</p>` : ''}
           </div>
         </div>
       </div>
@@ -361,54 +412,68 @@ export function initUserCenter() {
 
   // 查看订单详情
   document.querySelectorAll('.view-order-btn').forEach(button => {
-    button.addEventListener('click', function() {
+    button.addEventListener('click', async function() {
       const orderId = this.getAttribute('data-order-id');
-      const order = orderManager.getOrderById(orderId);
-      if (order) {
-        const modalHTML = renderOrderDetail(order);
-        document.body.insertAdjacentHTML('beforeend', modalHTML);
-        
-        const closeBtn = document.getElementById('close-modal-btn');
-        const modal = document.getElementById('order-detail-modal');
-        
-        if (closeBtn) {
-          closeBtn.addEventListener('click', () => {
-            modal.remove();
-          });
-        }
-        
-        modal.addEventListener('click', function(e) {
-          if (e.target === modal) {
-            modal.remove();
+      try {
+        const order = await ordersAPI.getOrderById(orderId);
+        if (order) {
+          const modalHTML = renderOrderDetail(order);
+          document.body.insertAdjacentHTML('beforeend', modalHTML);
+          
+          const closeBtn = document.getElementById('close-modal-btn');
+          const modal = document.getElementById('order-detail-modal');
+          
+          if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+              modal.remove();
+            });
           }
-        });
+          
+          modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+              modal.remove();
+            }
+          });
+        } else {
+          showNotification('订单不存在', 'error');
+        }
+      } catch (error) {
+        console.error('获取订单详情失败:', error);
+        showNotification('获取订单详情失败', 'error');
       }
     });
   });
 
   // 查看物流
   document.querySelectorAll('.view-tracking-btn').forEach(button => {
-    button.addEventListener('click', function() {
+    button.addEventListener('click', async function() {
       const orderId = this.getAttribute('data-order-id');
-      const trackingInfo = orderManager.getTrackingProgress(orderId);
-      if (trackingInfo) {
-        const modalHTML = renderTrackingModal(trackingInfo);
-        document.body.insertAdjacentHTML('beforeend', modalHTML);
-        
-        const closeBtn = document.getElementById('close-tracking-modal-btn');
-        const modal = document.getElementById('tracking-modal');
-        
-        if (closeBtn) {
-          closeBtn.addEventListener('click', () => {
-            modal.remove();
-          });
-        }
-        
-        modal.addEventListener('click', function(e) {
-          if (e.target === modal) {
-            modal.remove();
+      try {
+        const trackingInfo = await ordersAPI.getOrderTracking(orderId);
+        if (trackingInfo) {
+          const modalHTML = renderTrackingModal(trackingInfo);
+          document.body.insertAdjacentHTML('beforeend', modalHTML);
+          
+          const closeBtn = document.getElementById('close-tracking-modal-btn');
+          const modal = document.getElementById('tracking-modal');
+          
+          if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+              modal.remove();
+            });
           }
-        });
+          
+          modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+              modal.remove();
+            }
+          });
+        } else {
+          showNotification('暂无物流信息', 'info');
+        }
+      } catch (error) {
+        console.error('获取物流信息失败:', error);
+        showNotification('获取物流信息失败', 'error');
       }
     });
   });

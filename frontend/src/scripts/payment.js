@@ -71,30 +71,28 @@ class PaymentService {
    * @returns {Promise<Object>} 支付结果
    */
   async processAlipay(order) {
-    // TODO: 接入支付宝支付接口
-    // 参考文档: https://opendocs.alipay.com/
-    
+    // 调用后端支付 API
+    // 注意：实际支付集成需要根据具体支付平台文档实现
     try {
-      // 示例：调用后端 API 创建支付订单
-      // const response = await fetch('/api/payment/alipay', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(order)
-      // });
-      // const data = await response.json();
-      // return data;
-
-      // 当前为模拟实现
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            success: true,
-            message: '支付成功',
-            paymentId: `alipay_${Date.now()}`,
-            orderId: `order_${Date.now()}`
-          });
-        }, 1500);
+      const { apiPost } = await import('./api.js');
+      const result = await apiPost('payment/process', {
+        orderId: order.id || order._id,
+        paymentMethod: 'alipay'
       });
+
+      if (result.success) {
+        return {
+          success: true,
+          message: result.message || '支付成功',
+          paymentId: result.data?.paymentId,
+          orderId: order.id || order._id
+        };
+      }
+
+      return {
+        success: false,
+        message: result.message || '支付处理失败，请重试'
+      };
     } catch (error) {
       console.error('支付宝支付错误:', error);
       return {
@@ -110,30 +108,28 @@ class PaymentService {
    * @returns {Promise<Object>} 支付结果
    */
   async processWechatPay(order) {
-    // TODO: 接入微信支付接口
-    // 参考文档: https://pay.weixin.qq.com/
-    
+    // 调用后端支付 API
+    // 注意：实际支付集成需要根据具体支付平台文档实现
     try {
-      // 示例：调用后端 API 创建支付订单
-      // const response = await fetch('/api/payment/wechat', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(order)
-      // });
-      // const data = await response.json();
-      // return data;
-
-      // 当前为模拟实现
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            success: true,
-            message: '支付成功',
-            paymentId: `wechat_${Date.now()}`,
-            orderId: `order_${Date.now()}`
-          });
-        }, 1500);
+      const { apiPost } = await import('./api.js');
+      const result = await apiPost('payment/process', {
+        orderId: order.id || order._id,
+        paymentMethod: 'wechat'
       });
+
+      if (result.success) {
+        return {
+          success: true,
+          message: result.message || '支付成功',
+          paymentId: result.data?.paymentId,
+          orderId: order.id || order._id
+        };
+      }
+
+      return {
+        success: false,
+        message: result.message || '支付处理失败，请重试'
+      };
     } catch (error) {
       console.error('微信支付错误:', error);
       return {
@@ -149,38 +145,28 @@ class PaymentService {
    * @returns {Promise<Object>} 支付结果
    */
   async processStripe(order) {
-    // TODO: 接入 Stripe 支付接口
-    // 参考文档: https://stripe.com/docs/payments
-    
+    // 调用后端支付 API
+    // 注意：实际支付集成需要根据具体支付平台文档实现
     try {
-      // 示例：使用 Stripe.js 处理支付
-      // const stripe = Stripe('YOUR_PUBLISHABLE_KEY');
-      // const { error, paymentMethod } = await stripe.createPaymentMethod({
-      //   type: 'card',
-      //   card: cardElement,
-      // });
-      // if (error) {
-      //   return { success: false, message: error.message };
-      // }
-      // const response = await fetch('/api/payment/stripe', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ ...order, paymentMethodId: paymentMethod.id })
-      // });
-      // const data = await response.json();
-      // return data;
-
-      // 当前为模拟实现
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            success: true,
-            message: '支付成功',
-            paymentId: `stripe_${Date.now()}`,
-            orderId: `order_${Date.now()}`
-          });
-        }, 1500);
+      const { apiPost } = await import('./api.js');
+      const result = await apiPost('payment/process', {
+        orderId: order.id || order._id,
+        paymentMethod: 'stripe'
       });
+
+      if (result.success) {
+        return {
+          success: true,
+          message: result.message || '支付成功',
+          paymentId: result.data?.paymentId,
+          orderId: order.id || order._id
+        };
+      }
+
+      return {
+        success: false,
+        message: result.message || '支付处理失败，请重试'
+      };
     } catch (error) {
       console.error('Stripe 支付错误:', error);
       return {

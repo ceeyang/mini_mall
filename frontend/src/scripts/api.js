@@ -147,6 +147,25 @@ export async function apiPost(endpoint, body = {}) {
 export async function apiPut(endpoint, body = {}) {
   return apiRequest(endpoint, {
     method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+}
+
+/**
+ * PATCH 请求
+ * @param {string} endpoint - API 端点
+ * @param {Object} body - 请求体
+ * @returns {Promise<Object>} API 响应数据
+ */
+export async function apiPatch(endpoint, body = {}) {
+  return apiRequest(endpoint, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(body),
   });
 }

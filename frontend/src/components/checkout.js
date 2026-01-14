@@ -6,7 +6,6 @@
 import { cartManager } from '../scripts/cart.js';
 import { showNotification } from '../scripts/ui.js';
 import { paymentService } from '../scripts/payment.js';
-import { orderManager } from '../scripts/orders.js';
 import { authManager } from '../scripts/auth.js';
 
 /**
@@ -316,37 +315,56 @@ async function handleOrderSubmit() {
   submitBtn.textContent = '处理中...';
 
   try {
-    // 调用支付服务
-    const result = await paymentService.processPayment(order, paymentMethod);
+    // 先创建订单
+    const { ordersAPI } = await import('../scripts/orders-api.js');
+    
+  // 构建订单数据（格式需要匹配后端API）
+  const orderData = {
+    items: order.items.map(item => ({
+      productId: item.id || item.productId || item._id,
+      quantity: item.quantity || 1
+    })),
+    shipping: {
+      name: order.shipping.name,
+      phone: order.shipping.phone,
+      address: order.shipping.address,
+      city: order.shipping.city,
+      province: order.shipping.province || '',
+      postalCode: order.shipping.postal || ''
+    },
+    paymentMethod: order.paymentMethod
+  };
+
+    // 创建订单
+    const createdOrder = await ordersAPI.createOrder(orderData);
+    
+    if (!createdOrder) {
+      throw new Error('订单创建失败');
+    }
+
+    // 订单创建成功后，处理支付
+    const result = await paymentService.processPayment(createdOrder, paymentMethod);
     
     if (result.success) {
-      // 支付成功，创建订单
-      try {
-        const createdOrder = orderManager.createOrder(order);
-        showNotification('订单提交成功！', 'success');
-        
-        // 清空购物车
-        cartManager.clearCart();
-        
-        // 跳转到用户中心查看订单
-        setTimeout(() => {
-          window.location.href = 'user-center.html';
-        }, 2000);
-      } catch (error) {
-        console.error('创建订单错误:', error);
-        showNotification('订单创建失败，请联系客服', 'error');
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalText;
-      }
+      showNotification('订单提交成功！', 'success');
+      
+      // 清空购物车
+      cartManager.clearCart();
+      
+      // 跳转到用户中心查看订单
+      setTimeout(() => {
+        window.location.href = 'user-center.html';
+      }, 2000);
     } else {
-      // 支付失败
-      showNotification(result.message || '支付失败，请重试', 'error');
-      submitBtn.disabled = false;
-      submitBtn.textContent = originalText;
+      // 支付失败，但订单已创建（待支付状态）
+      showNotification('订单已创建，但支付失败。请在用户中心完成支付', 'warning');
+      setTimeout(() => {
+        window.location.href = 'user-center.html';
+      }, 2000);
     }
   } catch (error) {
-    console.error('支付处理错误:', error);
-    showNotification('支付处理出错，请稍后重试', 'error');
+    console.error('订单处理错误:', error);
+    showNotification(error.message || '订单处理出错，请稍后重试', 'error');
     submitBtn.disabled = false;
     submitBtn.textContent = originalText;
   }

@@ -13,6 +13,7 @@ import productRoutes from './routes/products.js';
 import orderRoutes from './routes/orders.js';
 import paymentRoutes from './routes/payment.js';
 import expressRoutes from './routes/express.js';
+import contactRoutes from './routes/contact.js';
 import { errorHandler } from './middleware/error.js';
 
 // 环境变量已在 env-loader.js 中加载
@@ -69,6 +70,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/express', expressRoutes);
+app.use('/api/contact', contactRoutes);
 
 // 404 处理
 app.use((req, res) => {

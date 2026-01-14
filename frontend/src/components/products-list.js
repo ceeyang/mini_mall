@@ -90,17 +90,34 @@ function filterAndSortProducts(productsList) {
  * 生成商品列表区域 HTML
  * @returns {Promise<string>} 商品列表区域 HTML 字符串
  */
+// 用于防止重复加载的标记
+let isLoading = false;
+
 export async function renderProductsList() {
+  // 如果正在加载，直接返回（防止重复请求）
+  if (isLoading) {
+    return renderLoadingPlaceholder();
+  }
+
   // 从 API 获取商品数据
   if (cachedProducts.length === 0) {
-    const sortParam = currentFilter.sortBy === 'price-asc' ? 'price_asc' : 
-                     currentFilter.sortBy === 'price-desc' ? 'price_desc' : 'date_desc';
-    const params = {
-      category: currentFilter.category !== 'all' ? currentFilter.category : undefined,
-      sort: sortParam,
-    };
-    cachedProducts = await productsAPI.getProducts(params);
-    cachedCategories = await productsAPI.getCategories();
+    isLoading = true;
+    try {
+      const sortParam = currentFilter.sortBy === 'price-asc' ? 'price_asc' : 
+                       currentFilter.sortBy === 'price-desc' ? 'price_desc' : 'date_desc';
+      const params = {
+        category: currentFilter.category !== 'all' ? currentFilter.category : undefined,
+        sort: sortParam,
+      };
+      // 只调用一次接口获取商品列表
+      cachedProducts = await productsAPI.getProducts(params);
+      // 从已获取的商品列表中提取分类，避免重复请求
+      if (cachedCategories.length === 0 && cachedProducts.length > 0) {
+        cachedCategories = [...new Set(cachedProducts.map(p => p.category))].filter(Boolean).sort();
+      }
+    } finally {
+      isLoading = false;
+    }
   }
   
   const filteredProducts = filterAndSortProducts(cachedProducts);
@@ -176,13 +193,74 @@ export async function renderProductsList() {
  * 更新商品列表显示
  */
 export async function updateProductsList() {
-  // 清除缓存，重新获取数据
-  cachedProducts = [];
   const productsContainer = document.getElementById('products-container');
-  if (productsContainer) {
-    productsContainer.innerHTML = await renderProductsList();
-    initProductsList();
+  if (!productsContainer) return;
+
+  // 如果正在加载，直接返回（防止重复请求）
+  if (isLoading) {
+    return;
   }
+
+  // 显示加载状态
+  productsContainer.innerHTML = renderLoadingPlaceholder();
+
+  try {
+    // 清除缓存，重新获取数据
+    cachedProducts = [];
+    cachedCategories = []; // 同时清除分类缓存
+    isLoading = true;
+    
+    const html = await renderProductsList();
+    productsContainer.innerHTML = html;
+    initProductsList();
+  } catch (error) {
+    console.error('更新商品列表失败:', error);
+    productsContainer.innerHTML = '<div class="text-center py-12 text-gray-500">商品列表加载失败，请稍后重试</div>';
+  } finally {
+    isLoading = false;
+  }
+}
+
+/**
+ * 生成加载占位视图
+ * @returns {string} 加载占位 HTML
+ */
+function renderLoadingPlaceholder() {
+  return `
+    <section id="products" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-2">商品列表</h1>
+        <p class="text-lg text-gray-600">发现更多优质商品，享受购物乐趣</p>
+      </div>
+
+      <!-- 筛选和排序工具栏占位 -->
+      <div class="bg-white rounded-2xl shadow-md p-6 mb-8 border border-gray-200 animate-pulse">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div class="h-10 bg-gray-200 rounded-lg w-32"></div>
+          <div class="h-10 bg-gray-200 rounded-lg w-32"></div>
+          <div class="h-10 bg-gray-200 rounded-lg w-24"></div>
+        </div>
+      </div>
+
+      <!-- 商品网格占位 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        ${Array.from({ length: 6 }).map(() => `
+          <div class="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden animate-pulse">
+            <div class="h-64 bg-gray-200"></div>
+            <div class="p-6">
+              <div class="h-4 bg-gray-200 rounded w-20 mb-2"></div>
+              <div class="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
+              <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
+              <div class="flex items-center justify-between">
+                <div class="h-8 bg-gray-200 rounded w-24"></div>
+                <div class="h-10 bg-gray-200 rounded w-32"></div>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+  `;
 }
 
 /**

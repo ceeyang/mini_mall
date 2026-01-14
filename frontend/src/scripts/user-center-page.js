@@ -9,15 +9,15 @@ import { renderFooter } from '../components/footer.js';
 import { initUI } from './ui.js';
 import { cartManager } from './cart.js';
 import { authManager } from './auth.js';
-import { orderManager } from './orders.js';
 
 /**
  * 更新用户中心显示
  */
-function updateUserCenter() {
+async function updateUserCenter() {
   const userCenterContainer = document.getElementById('user-center-container');
   if (userCenterContainer) {
-    userCenterContainer.innerHTML = renderUserCenter();
+    const html = await renderUserCenter();
+    userCenterContainer.innerHTML = html;
     initUserCenter();
   }
 }
@@ -42,8 +42,13 @@ function initUserCenterPage() {
   // 渲染用户中心
   const userCenterContainer = document.getElementById('user-center-container');
   if (userCenterContainer) {
-    userCenterContainer.innerHTML = renderUserCenter();
-    initUserCenter();
+    renderUserCenter().then(html => {
+      userCenterContainer.innerHTML = html;
+      initUserCenter();
+    }).catch(error => {
+      console.error('渲染用户中心失败:', error);
+      userCenterContainer.innerHTML = '<div class="text-center py-12 text-gray-500">加载失败，请稍后重试</div>';
+    });
   }
 
   // 渲染页脚
@@ -66,10 +71,8 @@ function initUserCenterPage() {
     }
   });
 
-  // 监听订单变化
-  orderManager.onOrdersChange(() => {
-    updateUserCenter();
-  });
+  // 订单变化时刷新（通过重新获取数据）
+  // 注意：不再使用 localStorage 的 orderManager，改为从后端 API 获取
 
   // 监听购物车变化，更新导航栏购物车数量
   cartManager.onCartChange(() => {

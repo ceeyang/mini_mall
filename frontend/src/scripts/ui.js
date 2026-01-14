@@ -24,17 +24,60 @@ export function initSmoothScroll() {
 }
 
 /**
- * 初始化表单处理
+ * 初始化表单处理（仅处理联系表单，排除登录表单）
  */
 export function initFormHandling() {
-  const form = document.querySelector('form');
-  if (form) {
-    form.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      await showAlert('感谢您的留言！我们会尽快与您联系。', '提交成功', 'success');
-      this.reset();
-    });
-  }
+  // 只处理联系表单，排除登录表单（id="auth-form"）
+  const forms = document.querySelectorAll('form:not(#auth-form)');
+  forms.forEach(form => {
+    // 检查是否是联系表单（通过检查是否有 message 字段）
+    const hasMessageField = form.querySelector('textarea[name="message"]') || 
+                           form.querySelector('textarea[id="message"]');
+    
+    if (hasMessageField) {
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // 获取表单数据
+        const formData = new FormData(this);
+        const contactData = {
+          name: formData.get('name'),
+          email: formData.get('email'),
+          phone: formData.get('phone') || '',
+          message: formData.get('message')
+        };
+
+        // 显示加载状态
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn?.textContent;
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = '提交中...';
+        }
+
+        try {
+          // 发送留言到后端
+          const { apiPost } = await import('./api.js');
+          const result = await apiPost('contact', contactData);
+
+          if (result.success) {
+            await showAlert('感谢您的留言！我们会尽快与您联系。', '提交成功', 'success');
+            this.reset();
+          } else {
+            await showAlert(result.message || '提交失败，请稍后重试', '提交失败', 'error');
+          }
+        } catch (error) {
+          console.error('提交留言错误:', error);
+          await showAlert('提交失败，请稍后重试', '提交失败', 'error');
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+          }
+        }
+      });
+    }
+  });
 }
 
 /**

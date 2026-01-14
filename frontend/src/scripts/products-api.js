@@ -58,17 +58,25 @@ class ProductsAPI {
 
   /**
    * 获取商品分类列表
+   * @param {Array} products - 可选的商品列表，如果提供则从中提取分类，否则从 API 获取
    * @returns {Promise<Array>} 分类列表
    */
-  async getCategories() {
+  async getCategories(products = null) {
     try {
+      // 如果提供了商品列表，直接从列表中提取分类
+      if (products && Array.isArray(products) && products.length > 0) {
+        const categories = [...new Set(products.map(p => p.category || p.categoryName))];
+        return categories.filter(Boolean).sort();
+      }
+      
+      // 否则从 API 获取（仅在必要时调用）
       const result = await apiGet('products');
-      const products = result.success && result.data 
+      const productsList = result.success && result.data 
         ? (result.data.products || result.data) 
         : [];
       
       // 从商品列表中提取分类
-      const categories = [...new Set(products.map(p => p.category || p.categoryName))];
+      const categories = [...new Set(productsList.map(p => p.category || p.categoryName))];
       return categories.filter(Boolean).sort();
     } catch (error) {
       console.error('获取分类列表错误:', error);
