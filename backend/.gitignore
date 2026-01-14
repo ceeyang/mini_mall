@@ -28,6 +28,7 @@ Thumbs.db
 # 构建输出
 dist/
 build/
+docs/
 
 # 临时文件
 *.tmp

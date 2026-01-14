@@ -28,8 +28,19 @@ backend/
 ├── database/         # 数据库相关
 │   └── seeds/        # 种子数据
 │       └── products.js  # 商品种子数据
+├── doc/              # 文档目录
+│   ├── MONGODB_SETUP.md  # MongoDB 安装指南
+│   ├── RUN.md            # 运行指南
+│   ├── CODE_STYLE.md     # 代码规范指南
+│   └── API_DOCS.md       # API 文档生成指南
+├── docs/             # 生成的文档（gitignore）
+│   └── api/          # API 文档
 ├── package.json      # 项目配置
 ├── .env.example      # 环境变量示例
+├── .eslintrc.cjs     # ESLint 配置
+├── .prettierrc.json  # Prettier 配置
+├── jsdoc.json        # JSDoc 配置
+├── start-mongodb.sh  # MongoDB 启动脚本
 └── README.md         # 本文件
 ```
 
@@ -58,15 +69,16 @@ cp .env.example .env
 
 ### 3. 启动 MongoDB
 
-确保 MongoDB 服务正在运行。如果使用本地 MongoDB：
+确保 MongoDB 服务正在运行。详细说明请查看 `doc/MONGODB_SETUP.md`。
 
+**快速启动（使用 Docker，推荐）:**
 ```bash
-# macOS (使用 Homebrew)
-brew services start mongodb-community
-
-# 或直接运行
-mongod
+./start-mongodb.sh
 ```
+
+**其他方式:**
+- 使用 Homebrew: `brew services start mongodb-community`
+- 使用 MongoDB Atlas 云服务: 查看 `doc/MONGODB_SETUP.md`
 
 ### 4. 初始化数据库（可选）
 
@@ -261,6 +273,52 @@ Headers: {
 - 前端 API 调用示例：查看 `frontend/src/scripts/auth.js`
 - 支付接入：查看 `doc/PAYMENT_INTEGRATION.md`
 - Google OAuth：查看 `doc/GOOGLE_OAUTH.md`
+- 代码规范：查看 `doc/CODE_STYLE.md`
+- API 文档生成：查看 `doc/API_DOCS.md`
+
+## 🔧 开发工具
+
+### 代码规范检查
+
+```bash
+# 检查代码规范
+npm run lint
+
+# 自动修复代码问题
+npm run lint:fix
+
+# 格式化代码
+npm run format
+
+# 检查代码格式
+npm run format:check
+
+# 综合检查（lint + format）
+npm run check
+```
+
+### API 文档生成
+
+```bash
+# 生成 API 文档
+npm run docs
+
+# 生成文档并启动本地服务器查看
+npm run docs:serve
+```
+
+文档将生成在 `docs/api/` 目录下。
+
+## 📋 代码规范
+
+本项目遵循 **Google JavaScript 代码规范**：
+
+- 使用 ESLint 进行代码检查
+- 使用 Prettier 进行代码格式化
+- 使用 JSDoc 生成 API 文档
+- 所有函数必须包含 JSDoc 注释
+
+详细说明请查看 `doc/CODE_STYLE.md`。
 
 ---
 

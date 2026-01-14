@@ -6,7 +6,8 @@
 import express from 'express';
 import { query, validationResult } from 'express-validator';
 import Order from '../models/Order.js';
-import { authenticate, asyncHandler } from '../middleware/auth.js';
+import { authenticate } from '../middleware/auth.js';
+import { asyncHandler } from '../middleware/error.js';
 
 const router = express.Router();
 

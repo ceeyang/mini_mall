@@ -138,8 +138,8 @@ orderSchema.pre('save', async function(next) {
 });
 
 // 索引
+// orderNumber 已有 unique: true，会自动创建唯一索引，无需重复定义
 orderSchema.index({ userId: 1, createdAt: -1 });
-orderSchema.index({ orderNumber: 1 });
 orderSchema.index({ status: 1 });
 
 const Order = mongoose.model('Order', orderSchema);

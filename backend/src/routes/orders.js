@@ -7,7 +7,8 @@ import express from 'express';
 import { body, validationResult } from 'express-validator';
 import Order from '../models/Order.js';
 import Product from '../models/Product.js';
-import { authenticate, asyncHandler } from '../middleware/auth.js';
+import { authenticate } from '../middleware/auth.js';
+import { asyncHandler } from '../middleware/error.js';
 
 const router = express.Router();
 
