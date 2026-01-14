@@ -3,9 +3,12 @@
  * 生成商品列表和商品卡片
  */
 
-import { products } from '../data/products.js';
 import { cartManager } from '../scripts/cart.js';
+import { productsAPI } from '../scripts/products-api.js';
 import { showNotification } from '../scripts/ui.js';
+
+// 缓存商品数据
+let cachedProducts = [];
 
 /**
  * 生成商品卡片 HTML
@@ -39,12 +42,17 @@ function renderProductCard(product) {
 /**
  * 生成商品展示区域 HTML（首页用，只显示前3个）
  * @param {number} limit - 显示商品数量限制，默认3
- * @returns {string} 商品展示区域 HTML 字符串
+ * @returns {Promise<string>} 商品展示区域 HTML 字符串
  */
-export function renderProducts(limit = null) {
-  const displayProducts = limit ? products.slice(0, limit) : products;
+export async function renderProducts(limit = null) {
+  // 从 API 获取商品数据
+  if (cachedProducts.length === 0) {
+    cachedProducts = await productsAPI.getProducts();
+  }
+  
+  const displayProducts = limit ? cachedProducts.slice(0, limit) : cachedProducts;
   const productsHTML = displayProducts.map(product => renderProductCard(product)).join('');
-  const showMoreButton = limit && products.length > limit;
+  const showMoreButton = limit && cachedProducts.length > limit;
   
   return `
     <section id="products" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -72,13 +80,21 @@ export function renderProducts(limit = null) {
 export function initProducts() {
   // 为所有"加入购物车"按钮添加事件监听
   document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-    button.addEventListener('click', function() {
-      const productId = parseInt(this.getAttribute('data-product-id'));
-      const product = products.find(p => p.id === productId);
+    button.addEventListener('click', async function() {
+      const productId = this.getAttribute('data-product-id');
+      
+      // 从缓存或 API 获取商品详情
+      let product = cachedProducts.find(p => p.id === productId || p._id === productId);
+      
+      if (!product) {
+        product = await productsAPI.getProductById(productId);
+      }
       
       if (product) {
         cartManager.addItem(product, 1);
         showNotification(`${product.name} 已添加到购物车！`, 'success');
+      } else {
+        showNotification('商品信息获取失败', 'error');
       }
     });
   });

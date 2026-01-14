@@ -3,15 +3,14 @@
  * 初始化所有模块和组件
  */
 
-import { renderNavbar, initNavbar } from '../components/navbar.js';
-import { renderHero } from '../components/hero.js';
-import { renderProducts, initProducts } from '../components/products.js';
-import { renderCart, initCart } from '../components/cart.js';
 import { renderAbout } from '../components/about.js';
 import { renderContact } from '../components/contact.js';
 import { renderFooter } from '../components/footer.js';
-import { initUI } from './ui.js';
+import { renderHero } from '../components/hero.js';
+import { initNavbar, renderNavbar } from '../components/navbar.js';
+import { initProducts, renderProducts } from '../components/products.js';
 import { cartManager } from './cart.js';
+import { initUI } from './ui.js';
 
 /**
  * 初始化应用
@@ -32,8 +31,13 @@ function initApp() {
   const productsContainer = document.getElementById('products-container');
   if (productsContainer) {
     // 首页只显示前3个商品，并显示"更多商品"按钮
-    productsContainer.innerHTML = renderProducts(3);
-    initProducts();
+    renderProducts(3).then(html => {
+      productsContainer.innerHTML = html;
+      initProducts();
+    }).catch(error => {
+      console.error('加载商品失败:', error);
+      productsContainer.innerHTML = '<div class="text-center py-12 text-gray-500">商品加载失败，请稍后重试</div>';
+    });
   }
 
   const aboutContainer = document.getElementById('about-container');

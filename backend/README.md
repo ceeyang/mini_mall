@@ -62,8 +62,10 @@ cp .env.example .env
 ```
 
 编辑 `.env` 文件，配置以下内容：
+- `PORT`: 服务器端口（默认: 3000）
 - `MONGODB_URI`: MongoDB 数据库连接地址
-- `JWT_SECRET`: JWT 密钥
+- `JWT_SECRET`: JWT 密钥（生产环境请务必修改）
+- `FRONTEND_URL`: 前端地址（用于 CORS，默认: http://localhost:8080）
 - `GOOGLE_CLIENT_ID` 和 `GOOGLE_CLIENT_SECRET`: Google OAuth 配置（可选）
 - 支付相关配置（可选）
 

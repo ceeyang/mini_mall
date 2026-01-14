@@ -19,27 +19,17 @@ npm install
 在 `backend` 目录下创建 `.env` 文件：
 
 ```bash
-# 服务器配置
-PORT=3000
-NODE_ENV=development
-FRONTEND_URL=http://localhost:3000
-
-# MongoDB 配置
-# 本地 MongoDB（默认）
-MONGODB_URI=mongodb://localhost:27017/mini_mall
-
-# 或使用 MongoDB Atlas 云服务
-# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/mini_mall
-
-# JWT 配置
-JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-JWT_EXPIRES_IN=7d
-
-# Google OAuth 配置（可选）
-# GOOGLE_CLIENT_ID=your-google-client-id
-# GOOGLE_CLIENT_SECRET=your-google-client-secret
-# GOOGLE_CALLBACK_URL=http://localhost:3000/api/auth/google/callback
+cd backend
+cp .env.example .env
+# 编辑 .env 文件
 ```
+
+主要配置项：
+- `PORT`: 服务器端口（默认: 3000）
+- `MONGODB_URI`: MongoDB 连接地址
+- `JWT_SECRET`: JWT 密钥（生产环境请务必修改）
+- `FRONTEND_URL`: 前端地址（用于 CORS，默认: http://localhost:8080）
+- `GOOGLE_CLIENT_ID` 和 `GOOGLE_CLIENT_SECRET`: Google OAuth 配置（可选）
 
 ### 3. 启动 MongoDB
 

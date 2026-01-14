@@ -4,9 +4,7 @@
  */
 
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-
-dotenv.config();
+// 环境变量已在 env-loader.js 中加载
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/mini_mall';
 

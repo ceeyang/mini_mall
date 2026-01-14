@@ -5,7 +5,8 @@
 
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
+// 导入环境变量加载器（会自动加载）
+import './config/env-loader.js';
 import { connectDB } from './config/database.js';
 import authRoutes from './routes/auth.js';
 import productRoutes from './routes/products.js';
@@ -14,12 +15,11 @@ import paymentRoutes from './routes/payment.js';
 import expressRoutes from './routes/express.js';
 import { errorHandler } from './middleware/error.js';
 
-// 加载环境变量
-dotenv.config();
+// 环境变量已在 env-loader.js 中加载
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:8080';
 
 // 连接数据库
 connectDB();

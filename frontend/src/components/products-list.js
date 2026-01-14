@@ -3,7 +3,7 @@
  * 包含分类筛选、排序功能
  */
 
-import { products, getCategories } from '../data/products.js';
+import { productsAPI } from '../scripts/products-api.js';
 import { cartManager } from '../scripts/cart.js';
 import { showNotification } from '../scripts/ui.js';
 
@@ -13,6 +13,10 @@ let currentFilter = {
   sortBy: 'date', // 'date', 'price-asc', 'price-desc'
   sortOrder: 'desc' // 'asc', 'desc'
 };
+
+// 缓存的商品数据
+let cachedProducts = [];
+let cachedCategories = [];
 
 /**
  * 生成商品卡片 HTML
@@ -40,7 +44,7 @@ function renderProductCard(product) {
           <span class="text-2xl font-bold text-indigo-600">¥${product.price}</span>
           <button 
             class="add-to-cart-btn bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-200 cursor-pointer"
-            data-product-id="${product.id}">
+            data-product-id="${product.id || product._id}">
             加入购物车
           </button>
         </div>
@@ -84,11 +88,22 @@ function filterAndSortProducts(productsList) {
 
 /**
  * 生成商品列表区域 HTML
- * @returns {string} 商品列表区域 HTML 字符串
+ * @returns {Promise<string>} 商品列表区域 HTML 字符串
  */
-export function renderProductsList() {
-  const categories = getCategories();
-  const filteredProducts = filterAndSortProducts(products);
+export async function renderProductsList() {
+  // 从 API 获取商品数据
+  if (cachedProducts.length === 0) {
+    const sortParam = currentFilter.sortBy === 'price-asc' ? 'price_asc' : 
+                     currentFilter.sortBy === 'price-desc' ? 'price_desc' : 'date_desc';
+    const params = {
+      category: currentFilter.category !== 'all' ? currentFilter.category : undefined,
+      sort: sortParam,
+    };
+    cachedProducts = await productsAPI.getProducts(params);
+    cachedCategories = await productsAPI.getCategories();
+  }
+  
+  const filteredProducts = filterAndSortProducts(cachedProducts);
   const productsHTML = filteredProducts.map(product => renderProductCard(product)).join('');
 
   return `
@@ -108,7 +123,7 @@ export function renderProductsList() {
               id="category-filter" 
               class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all duration-200 cursor-pointer">
               <option value="all">全部</option>
-              ${categories.map(cat => `
+              ${cachedCategories.map(cat => `
                 <option value="${cat}" ${currentFilter.category === cat ? 'selected' : ''}>${cat}</option>
               `).join('')}
             </select>
@@ -160,10 +175,12 @@ export function renderProductsList() {
 /**
  * 更新商品列表显示
  */
-export function updateProductsList() {
+export async function updateProductsList() {
+  // 清除缓存，重新获取数据
+  cachedProducts = [];
   const productsContainer = document.getElementById('products-container');
   if (productsContainer) {
-    productsContainer.innerHTML = renderProductsList();
+    productsContainer.innerHTML = await renderProductsList();
     initProductsList();
   }
 }
@@ -207,13 +224,21 @@ export function initProductsList() {
 
   // 为所有"加入购物车"按钮添加事件监听
   document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-    button.addEventListener('click', function() {
-      const productId = parseInt(this.getAttribute('data-product-id'));
-      const product = products.find(p => p.id === productId);
+    button.addEventListener('click', async function() {
+      const productId = this.getAttribute('data-product-id');
+      
+      // 从缓存或 API 获取商品详情
+      let product = cachedProducts.find(p => p.id === productId || p._id === productId);
+      
+      if (!product) {
+        product = await productsAPI.getProductById(productId);
+      }
       
       if (product) {
         cartManager.addItem(product, 1);
         showNotification(`${product.name} 已添加到购物车！`, 'success');
+      } else {
+        showNotification('商品信息获取失败', 'error');
       }
     });
   });

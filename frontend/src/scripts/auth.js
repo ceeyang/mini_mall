@@ -3,6 +3,9 @@
  * 处理用户登录、注册、Google OAuth 等认证相关功能
  */
 
+import { apiPost, apiGet } from './api.js';
+import { config } from './config.js';
+
 /**
  * 用户认证管理类
  */
@@ -25,10 +28,15 @@ class AuthManager {
   /**
    * 保存用户信息到 localStorage
    * @param {Object} user - 用户对象
+   * @param {string} token - JWT token
    */
-  saveUser(user) {
-    localStorage.setItem('miniMallUser', JSON.stringify(user));
-    this.currentUser = user;
+  saveUser(user, token = null) {
+    const userData = {
+      ...user,
+      token: token || user.token,
+    };
+    localStorage.setItem('miniMallUser', JSON.stringify(userData));
+    this.currentUser = userData;
     this.notifyListeners();
   }
 
@@ -49,35 +57,18 @@ class AuthManager {
    */
   async login(email, password) {
     try {
-      // TODO: 调用后端 API 进行登录验证
-      // const response = await fetch('/api/auth/login', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email, password })
-      // });
-      // const data = await response.json();
-      // if (data.success) {
-      //   this.saveUser(data.user);
-      //   return { success: true, user: data.user };
-      // }
-      // return { success: false, message: data.message };
-
-      // 当前为模拟实现（仅用于演示）
-      // 实际使用时需要替换为真实的后端 API 调用
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          const user = {
-            id: Date.now(),
-            email: email,
-            name: email.split('@')[0],
-            avatar: null,
-            loginMethod: 'email',
-            createdAt: new Date().toISOString()
-          };
-          this.saveUser(user);
-          resolve({ success: true, user: user });
-        }, 1000);
-      });
+      const result = await apiPost('auth/login', { email, password });
+      
+      if (result.success && result.data) {
+        const { user, token } = result.data;
+        this.saveUser(user, token);
+        return { success: true, user: { ...user, token } };
+      }
+      
+      return { 
+        success: false, 
+        message: result.message || '登录失败，请检查邮箱和密码' 
+      };
     } catch (error) {
       console.error('登录错误:', error);
       return { success: false, message: '登录失败，请稍后重试' };
@@ -93,34 +84,18 @@ class AuthManager {
    */
   async register(name, email, password) {
     try {
-      // TODO: 调用后端 API 进行注册
-      // const response = await fetch('/api/auth/register', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ name, email, password })
-      // });
-      // const data = await response.json();
-      // if (data.success) {
-      //   this.saveUser(data.user);
-      //   return { success: true, user: data.user };
-      // }
-      // return { success: false, message: data.message };
-
-      // 当前为模拟实现
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          const user = {
-            id: Date.now(),
-            name: name,
-            email: email,
-            avatar: null,
-            loginMethod: 'email',
-            createdAt: new Date().toISOString()
-          };
-          this.saveUser(user);
-          resolve({ success: true, user: user });
-        }, 1000);
-      });
+      const result = await apiPost('auth/register', { name, email, password });
+      
+      if (result.success && result.data) {
+        const { user, token } = result.data;
+        this.saveUser(user, token);
+        return { success: true, user: { ...user, token } };
+      }
+      
+      return { 
+        success: false, 
+        message: result.message || '注册失败，请检查输入信息' 
+      };
     } catch (error) {
       console.error('注册错误:', error);
       return { success: false, message: '注册失败，请稍后重试' };
@@ -133,50 +108,11 @@ class AuthManager {
    */
   async loginWithGoogle() {
     try {
-      // TODO: 集成 Google OAuth
-      // 参考文档: https://developers.google.com/identity/protocols/oauth2
-      
-      // 示例：使用 Google Identity Services
-      // const client = google.accounts.oauth2.initTokenClient({
-      //   client_id: 'YOUR_GOOGLE_CLIENT_ID',
-      //   scope: 'email profile',
-      //   callback: async (response) => {
-      //     // 获取用户信息
-      //     const userInfo = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-      //       headers: { 'Authorization': `Bearer ${response.access_token}` }
-      //     }).then(r => r.json());
-      //     
-      //     // 调用后端 API 创建或登录用户
-      //     const backendResponse = await fetch('/api/auth/google', {
-      //       method: 'POST',
-      //       headers: { 'Content-Type': 'application/json' },
-      //       body: JSON.stringify({ googleUser: userInfo })
-      //     });
-      //     const data = await backendResponse.json();
-      //     if (data.success) {
-      //       this.saveUser(data.user);
-      //       return { success: true, user: data.user };
-      //     }
-      //   }
-      // });
-      // client.requestAccessToken();
-
-      // 当前为模拟实现
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          const user = {
-            id: Date.now(),
-            email: 'user@gmail.com',
-            name: 'Google User',
-            avatar: 'https://via.placeholder.com/100',
-            loginMethod: 'google',
-            googleId: 'google_' + Date.now(),
-            createdAt: new Date().toISOString()
-          };
-          this.saveUser(user);
-          resolve({ success: true, user: user });
-        }, 1500);
-      });
+      // 重定向到后端 Google OAuth 入口
+      // 使用配置中的 API 基础 URL
+      window.location.href = `${config.API_BASE_URL}/auth/google`;
+      // 注意：Google OAuth 会重定向回前端，token 会在 URL 参数中
+      return { success: true, redirect: true };
     } catch (error) {
       console.error('Google 登录错误:', error);
       return { success: false, message: 'Google 登录失败，请稍后重试' };

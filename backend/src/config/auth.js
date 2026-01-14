@@ -3,9 +3,7 @@
  * JWT 和 Google OAuth 配置
  */
 
-import dotenv from 'dotenv';
-
-dotenv.config();
+// 环境变量已在 env-loader.js 中加载
 
 export const jwtConfig = {
   secret: process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production',

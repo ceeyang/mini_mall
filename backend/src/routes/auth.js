@@ -264,7 +264,7 @@ router.get('/google/callback',
     );
 
     // 重定向到前端，携带 token
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:8080';
     res.redirect(`${frontendUrl}/src/pages/login.html?token=${token}&success=true`);
   })
 );
