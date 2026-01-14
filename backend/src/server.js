@@ -25,9 +25,31 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:8080';
 connectDB();
 
 // 中间件配置
+// CORS 配置：允许前端跨域请求
 app.use(cors({
-  origin: FRONTEND_URL,
-  credentials: true
+  origin: function (origin, callback) {
+    // 允许无 origin 的请求（如 Postman、移动应用等）
+    if (!origin) {
+      return callback(null, true);
+    }
+    
+    // 允许配置的前端地址
+    if (origin === FRONTEND_URL) {
+      return callback(null, true);
+    }
+    
+    // 开发环境：允许 localhost 的任意端口（方便调试）
+    if (process.env.NODE_ENV === 'development' && origin.startsWith('http://localhost:')) {
+      return callback(null, true);
+    }
+    
+    // 其他情况拒绝
+    callback(new Error('不允许的跨域请求'));
+  },
+  credentials: true, // 允许携带 cookie 和认证信息
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // 允许的 HTTP 方法
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'], // 允许的请求头
+  exposedHeaders: ['Content-Range', 'X-Content-Range'], // 暴露给前端的响应头
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
