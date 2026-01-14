@@ -35,6 +35,9 @@ router.get('/', [
     query.category = category.trim();
   }
 
+  // 调试日志：记录查询条件
+  console.log('🔍 商品查询条件:', JSON.stringify(query));
+
   // 构建排序
   let sortOption = {};
   switch (sort) {
@@ -65,6 +68,9 @@ router.get('/', [
 
   // 获取总数
   const total = await Product.countDocuments(query);
+
+  // 调试日志：记录查询结果
+  console.log(`📦 查询结果: 找到 ${products.length} 个商品（共 ${total} 个）`);
 
   // 获取所有分类
   const categories = await Product.distinct('category', { isActive: true });

@@ -6,7 +6,8 @@
 import mongoose from 'mongoose';
 // 环境变量已在 env-loader.js 中加载
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/mini_mall';
+//const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/mini_mall';
+const MONGODB_URI = 'mongodb+srv://cee:ceeyang%402026@mini-mall-cluster.b8yhk4f.mongodb.net/mini_mall';
 
 /**
  * 连接数据库

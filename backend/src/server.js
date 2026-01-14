@@ -15,6 +15,7 @@ import paymentRoutes from './routes/payment.js';
 import expressRoutes from './routes/express.js';
 import contactRoutes from './routes/contact.js';
 import { errorHandler } from './middleware/error.js';
+import { requestLogger } from './middleware/logger.js';
 
 // 环境变量已在 env-loader.js 中加载
 
@@ -26,6 +27,9 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:8080';
 connectDB();
 
 // 中间件配置
+// 请求日志中间件（放在最前面，记录所有请求）
+app.use(requestLogger);
+
 // CORS 配置：允许前端跨域请求
 app.use(cors({
   origin: function (origin, callback) {
