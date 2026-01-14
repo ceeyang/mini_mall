@@ -3,6 +3,8 @@
  * 处理页面交互、动画、导航等 UI 相关功能
  */
 
+import { showAlert } from './modal.js';
+
 /**
  * 初始化平滑滚动
  */
@@ -27,9 +29,9 @@ export function initSmoothScroll() {
 export function initFormHandling() {
   const form = document.querySelector('form');
   if (form) {
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', async function(e) {
       e.preventDefault();
-      alert('感谢您的留言！我们会尽快与您联系。');
+      await showAlert('感谢您的留言！我们会尽快与您联系。', '提交成功', 'success');
       this.reset();
     });
   }

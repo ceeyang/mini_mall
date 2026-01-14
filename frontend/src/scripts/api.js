@@ -73,6 +73,18 @@ export async function apiRequest(endpoint, options = {}) {
     const data = await response.json();
 
     if (!response.ok) {
+      // 处理验证错误（400），提取第一个错误信息
+      if (response.status === 400 && data.errors && Array.isArray(data.errors) && data.errors.length > 0) {
+        const firstError = data.errors[0];
+        return {
+          success: false,
+          status: response.status,
+          message: firstError.msg || data.message || '验证失败',
+          errors: data.errors,
+          data: null,
+        };
+      }
+      
       return {
         success: false,
         status: response.status,
@@ -119,6 +131,9 @@ export async function apiGet(endpoint, params = {}) {
 export async function apiPost(endpoint, body = {}) {
   return apiRequest(endpoint, {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(body),
   });
 }

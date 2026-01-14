@@ -122,16 +122,28 @@ export function renderLogin(isLoginMode = true) {
  * 初始化登录组件交互
  */
 export function initLogin() {
-  let isLoginMode = true;
+  // 从 URL 参数或表单容器获取当前模式（默认为登录模式）
+  const urlParams = new URLSearchParams(window.location.search);
+  const modeFromUrl = urlParams.get('mode');
+  const loginContainer = document.getElementById('login-container');
+  const currentMode = loginContainer?.getAttribute('data-mode') || modeFromUrl || 'login';
+  let isLoginMode = currentMode === 'login';
+
+  // 在容器上保存当前模式，以便切换时能正确读取
+  if (loginContainer) {
+    loginContainer.setAttribute('data-mode', isLoginMode ? 'login' : 'register');
+  }
 
   // 切换登录/注册模式
   const switchModeBtn = document.getElementById('switch-mode-btn');
   if (switchModeBtn) {
     switchModeBtn.addEventListener('click', function() {
-      isLoginMode = this.getAttribute('data-mode') === 'login';
+      const newMode = this.getAttribute('data-mode') === 'login';
       const loginContainer = document.getElementById('login-container');
       if (loginContainer) {
-        loginContainer.innerHTML = renderLogin(isLoginMode);
+        // 保存新模式到容器属性
+        loginContainer.setAttribute('data-mode', newMode ? 'login' : 'register');
+        loginContainer.innerHTML = renderLogin(newMode);
         initLogin();
       }
     });
@@ -168,6 +180,19 @@ export function initLogin() {
     authForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       
+      // 从表单容器获取当前模式（确保获取最新状态）
+      // 如果容器没有 data-mode 属性，则通过检查是否存在姓名输入框来判断
+      const loginContainer = document.getElementById('login-container');
+      let currentMode = loginContainer?.getAttribute('data-mode');
+      
+      // 如果容器没有保存模式，通过检查表单中是否有姓名输入框来判断
+      if (!currentMode) {
+        const nameInput = document.getElementById('name');
+        currentMode = nameInput ? 'register' : 'login';
+      }
+      
+      const isCurrentlyLoginMode = currentMode === 'login';
+      
       const formData = new FormData(this);
       const email = formData.get('email');
       const password = formData.get('password');
@@ -179,26 +204,35 @@ export function initLogin() {
       submitBtn.textContent = '处理中...';
 
       let result;
-      if (isLoginMode) {
-        result = await authManager.login(email, password);
+      if (isCurrentlyLoginMode) {
+        result = await authManager.login(email.trim(), password);
       } else {
-        if (!name) {
+        if (!name || name.trim() === '') {
           showNotification('请输入姓名', 'error');
           submitBtn.disabled = false;
           submitBtn.textContent = originalText;
           return;
         }
-        result = await authManager.register(name, email, password);
+        result = await authManager.register(name.trim(), email.trim(), password);
       }
 
       if (result.success) {
-        showNotification(isLoginMode ? '登录成功！' : '注册成功！', 'success');
+        showNotification(isCurrentlyLoginMode ? '登录成功！' : '注册成功！', 'success');
         setTimeout(() => {
           const returnUrl = new URLSearchParams(window.location.search).get('return') || 'user-center.html';
           window.location.href = returnUrl;
         }, 1000);
       } else {
-        showNotification(result.message || (isLoginMode ? '登录失败，请重试' : '注册失败，请重试'), 'error');
+        // 显示错误信息，如果有验证错误详情，也一并显示
+        let errorMessage = result.message || (isCurrentlyLoginMode ? '登录失败，请重试' : '注册失败，请重试');
+        if (result.errors && Array.isArray(result.errors) && result.errors.length > 0) {
+          // 如果有多个错误，显示第一个
+          const firstError = result.errors[0];
+          if (firstError.msg) {
+            errorMessage = firstError.msg;
+          }
+        }
+        showNotification(errorMessage, 'error');
         submitBtn.disabled = false;
         submitBtn.textContent = originalText;
       }

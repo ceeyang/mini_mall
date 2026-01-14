@@ -6,6 +6,7 @@
 import { authManager } from '../scripts/auth.js';
 import { orderManager } from '../scripts/orders.js';
 import { showNotification } from '../scripts/ui.js';
+import { showConfirm } from '../scripts/modal.js';
 
 /**
  * 生成订单状态标签 HTML
@@ -346,8 +347,9 @@ export function initUserCenter() {
   // 退出登录
   const logoutBtn = document.getElementById('logout-btn');
   if (logoutBtn) {
-    logoutBtn.addEventListener('click', function() {
-      if (confirm('确定要退出登录吗？')) {
+    logoutBtn.addEventListener('click', async function() {
+      const confirmed = await showConfirm('确定要退出登录吗？', '退出登录', 'warning');
+      if (confirmed) {
         authManager.logout();
         showNotification('已退出登录', 'info');
         setTimeout(() => {

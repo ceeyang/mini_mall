@@ -115,6 +115,7 @@ cp .env.example .env
 - [MongoDB 安装指南](backend/doc/MONGODB_SETUP.md)
 - [代码规范](backend/doc/CODE_STYLE.md)
 - [API 文档生成](backend/doc/API_DOCS.md)
+- [Google OAuth 配置指南](doc/GOOGLE_OAUTH_SETUP.md)
 
 ## 🛠️ 开发工具
 

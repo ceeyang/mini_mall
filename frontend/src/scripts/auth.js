@@ -3,7 +3,7 @@
  * 处理用户登录、注册、Google OAuth 等认证相关功能
  */
 
-import { apiPost, apiGet } from './api.js';
+import { apiPost } from './api.js';
 import { config } from './config.js';
 
 /**
@@ -57,7 +57,18 @@ class AuthManager {
    */
   async login(email, password) {
     try {
-      const result = await apiPost('auth/login', { email, password });
+      // 前端基本验证
+      if (!email || !email.trim()) {
+        return { success: false, message: '请输入邮箱' };
+      }
+      if (!password || !password.trim()) {
+        return { success: false, message: '请输入密码' };
+      }
+
+      const result = await apiPost('auth/login', { 
+        email: email.trim(), 
+        password: password.trim() 
+      });
       
       if (result.success && result.data) {
         const { user, token } = result.data;
@@ -65,9 +76,11 @@ class AuthManager {
         return { success: true, user: { ...user, token } };
       }
       
+      // 返回后端的具体错误信息
       return { 
         success: false, 
-        message: result.message || '登录失败，请检查邮箱和密码' 
+        message: result.message || '登录失败，请检查邮箱和密码',
+        errors: result.errors // 传递验证错误详情
       };
     } catch (error) {
       console.error('登录错误:', error);
@@ -84,7 +97,25 @@ class AuthManager {
    */
   async register(name, email, password) {
     try {
-      const result = await apiPost('auth/register', { name, email, password });
+      // 前端基本验证
+      if (!name || !name.trim()) {
+        return { success: false, message: '请输入姓名' };
+      }
+      if (!email || !email.trim()) {
+        return { success: false, message: '请输入邮箱' };
+      }
+      if (!password || !password.trim()) {
+        return { success: false, message: '请输入密码' };
+      }
+      if (password.trim().length < 6) {
+        return { success: false, message: '密码至少需要6位' };
+      }
+
+      const result = await apiPost('auth/register', { 
+        name: name.trim(), 
+        email: email.trim(), 
+        password: password.trim() 
+      });
       
       if (result.success && result.data) {
         const { user, token } = result.data;
@@ -92,9 +123,11 @@ class AuthManager {
         return { success: true, user: { ...user, token } };
       }
       
+      // 返回后端的具体错误信息
       return { 
         success: false, 
-        message: result.message || '注册失败，请检查输入信息' 
+        message: result.message || '注册失败，请检查输入信息',
+        errors: result.errors // 传递验证错误详情
       };
     } catch (error) {
       console.error('注册错误:', error);
