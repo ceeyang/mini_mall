@@ -116,6 +116,7 @@ cp .env.example .env
 - **[完整部署指南](doc/DEPLOY_GUIDE.md)** - 包含前端、后端和数据库的完整部署方案
 - **[快速部署指南](doc/DEPLOY_NOW.md)** - 快速上手指南
 - **[详细部署文档](doc/DEPLOYMENT.md)** - 详细的部署步骤和说明
+- **[单服务器部署指南](doc/DEPLOY_SINGLE_SERVER.md)** - 将前端和后端部署在同一台服务器（使用 Nginx）
 
 ### 推荐部署方案
 

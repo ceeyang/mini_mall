@@ -3,19 +3,19 @@
  * 启动 Express 服务器并配置中间件
  */
 
-import express from 'express';
 import cors from 'cors';
+import express from 'express';
 // 导入环境变量加载器（会自动加载）
-import './config/env-loader.js';
 import { connectDB } from './config/database.js';
-import authRoutes from './routes/auth.js';
-import productRoutes from './routes/products.js';
-import orderRoutes from './routes/orders.js';
-import paymentRoutes from './routes/payment.js';
-import expressRoutes from './routes/express.js';
-import contactRoutes from './routes/contact.js';
+import './config/env-loader.js';
 import { errorHandler } from './middleware/error.js';
 import { requestLogger } from './middleware/logger.js';
+import authRoutes from './routes/auth.js';
+import contactRoutes from './routes/contact.js';
+import expressRoutes from './routes/express.js';
+import orderRoutes from './routes/orders.js';
+import paymentRoutes from './routes/payment.js';
+import productRoutes from './routes/products.js';
 
 // 环境变量已在 env-loader.js 中加载
 
@@ -39,7 +39,7 @@ app.use(cors({
     }
 
     // 允许配置的前端地址
-    if (origin === FRONTEND_URL) {
+    if (FRONTEND_URL === '*' || origin === FRONTEND_URL) {
       return callback(null, true);
     }
 
@@ -88,8 +88,9 @@ app.use((req, res) => {
 app.use(errorHandler);
 
 // 启动服务器
-app.listen(PORT, () => {
-  console.log(`🚀 服务器运行在 http://localhost:${PORT}`);
+// 绑定到 0.0.0.0 以允许外部访问（默认只绑定到 localhost）
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 服务器运行在 http://0.0.0.0:${PORT}`);
   console.log(`📝 环境: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🌐 前端地址: ${FRONTEND_URL}`);
 });

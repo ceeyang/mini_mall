@@ -19,7 +19,11 @@
     "db:init:force": "node database/init-db.js --force",
     "docker:build": "docker build -t mini-mall-backend:latest .",
     "docker:run": "docker run -d --name mini-mall-backend -p 7891:7891 --env-file .env --restart unless-stopped mini-mall-backend:latest",
-    "docker:stop": "docker stop mini-mall-backend && docker rm mini-mall-backend"
+    "docker:stop": "docker stop mini-mall-backend && docker rm mini-mall-backend",
+    "docker:tag": "docker tag mini-mall-backend:latest ceeyang/mini-mall-backend:latest",
+    "docker:push": "docker push ceeyang/mini-mall-backend:latest",
+    "docker:save": "docker save mini-mall-backend:latest | gzip > mini-mall-backend.tar.gz && echo '镜像已导出为 mini-mall-backend.tar.gz'",
+    "docker:load": "echo 'Usage: gunzip -c mini-mall-backend.tar.gz | docker load'"
   },
   "keywords": [
     "ecommerce",

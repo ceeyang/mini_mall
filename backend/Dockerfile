@@ -7,7 +7,7 @@ WORKDIR /app
 
 # 设置环境变量
 ENV NODE_ENV=production
-ENV PORT=3000
+ENV PORT=7891
 
 # 安装系统依赖（如果需要）
 # RUN apk add --no-cache python3 make g++
