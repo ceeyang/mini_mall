@@ -16,7 +16,10 @@
     "docs:serve": "jsdoc -c jsdoc.json && serve docs/api",
     "check": "npm run lint && npm run format:check",
     "db:init": "node database/init-db.js",
-    "db:init:force": "node database/init-db.js --force"
+    "db:init:force": "node database/init-db.js --force",
+    "docker:build": "docker build -t mini-mall-backend:latest .",
+    "docker:run": "docker run -d --name mini-mall-backend -p 7891:7891 --env-file .env --restart unless-stopped mini-mall-backend:latest",
+    "docker:stop": "docker stop mini-mall-backend && docker rm mini-mall-backend"
   },
   "keywords": [
     "ecommerce",

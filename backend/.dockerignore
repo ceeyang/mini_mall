@@ -1,0 +1,50 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 环境变量文件（应该通过环境变量或 secrets 传递）
+.env
+.env.local
+.env.*.local
+
+# 日志文件
+logs/
+*.log
+
+# 测试和覆盖率
+coverage/
+.nyc_output/
+*.test.js
+*.spec.js
+
+# 开发工具
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# 文档
+doc/
+README.md
+*.md
+
+# 数据库相关（不需要在镜像中）
+database/
+start-mongodb.sh
+
+# 构建工具
+.eslintrc*
+.prettierrc*
+jsdoc.json
+
+# 其他
+.DS_Store
+Thumbs.db
