@@ -3,11 +3,11 @@
  * 初始化结算页面的所有组件
  */
 
-import { renderNavbar, initNavbar } from '../components/navbar.js';
-import { renderCheckout, initCheckout } from '../components/checkout.js';
+import { initCheckout, renderCheckout } from '../components/checkout.js';
 import { renderFooter } from '../components/footer.js';
-import { initUI } from './ui.js';
+import { initNavbar, renderNavbar } from '../components/navbar.js';
 import { cartManager } from './cart.js';
+import { initUI } from './ui.js';
 
 /**
  * 初始化结算页面
@@ -17,7 +17,7 @@ function initCheckoutPage() {
   if (cartManager.isEmpty()) {
     // 如果购物车为空，3秒后跳转到商品页面
     setTimeout(() => {
-      window.location.href = 'products.html';
+      window.location.href = '/products';
     }, 3000);
   }
 

@@ -1,0 +1,33 @@
+{
+    "cleanUrls": true,
+    "rewrites": [
+        {
+            "source": "/products",
+            "destination": "/src/pages/products.html"
+        },
+        {
+            "source": "/cart",
+            "destination": "/src/pages/cart.html"
+        },
+        {
+            "source": "/checkout",
+            "destination": "/src/pages/checkout.html"
+        },
+        {
+            "source": "/contact",
+            "destination": "/src/pages/contact.html"
+        },
+        {
+            "source": "/login",
+            "destination": "/src/pages/login.html"
+        },
+        {
+            "source": "/user-center",
+            "destination": "/src/pages/user-center.html"
+        },
+        {
+            "source": "/about",
+            "destination": "/src/pages/about.html"
+        }
+    ]
+}

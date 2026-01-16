@@ -3,12 +3,12 @@
  * 初始化用户中心页面的所有组件
  */
 
-import { renderNavbar, initNavbar } from '../components/navbar.js';
-import { renderUserCenter, initUserCenter } from '../components/user-center.js';
 import { renderFooter } from '../components/footer.js';
-import { initUI } from './ui.js';
-import { cartManager } from './cart.js';
+import { initNavbar, renderNavbar } from '../components/navbar.js';
+import { initUserCenter, renderUserCenter } from '../components/user-center.js';
 import { authManager } from './auth.js';
+import { cartManager } from './cart.js';
+import { initUI } from './ui.js';
 
 /**
  * 更新用户中心显示
@@ -28,7 +28,7 @@ async function updateUserCenter() {
 function initUserCenterPage() {
   // 如果未登录，跳转到登录页
   if (!authManager.isAuthenticated()) {
-    window.location.href = 'login.html?return=user-center.html';
+    window.location.href = '/login?return=/user-center';
     return;
   }
 

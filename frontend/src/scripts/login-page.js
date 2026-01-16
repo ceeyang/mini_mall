@@ -16,7 +16,7 @@ import { initUI } from './ui.js';
 function initLoginPage() {
   // 如果已登录，跳转到用户中心
   if (authManager.isAuthenticated()) {
-    window.location.href = 'user-center.html';
+    window.location.href = '/user-center';
     return;
   }
 
@@ -28,7 +28,7 @@ function initLoginPage() {
   }
 
   // 渲染登录组件
-  const loginContainer = document.getElementById('login-container');
+  const loginContainer = document.getElementById('auth-container');
   if (loginContainer) {
     loginContainer.innerHTML = renderLogin(true);
     initLogin();

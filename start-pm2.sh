@@ -392,7 +392,7 @@ fi
 
 echo ""
 print_msg "$GREEN" "🎉 部署完成！"
-printf "前端运行在: http://localhost:3000\n"
+printf "前端运行在: http://localhost:3000 (示例: /products, /login)\n"
 printf "后端运行在: http://localhost:8080/api\n"
 echo ""
 printf "常用 PM2 命令:\n"
