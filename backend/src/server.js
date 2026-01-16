@@ -20,8 +20,8 @@ import productRoutes from './routes/products.js';
 // 环境变量已在 env-loader.js 中加载
 
 const app = express();
-const PORT = process.env.PORT || 3030;
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:8080';
+const PORT = process.env.PORT || 8080;
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 // 连接数据库
 connectDB();
