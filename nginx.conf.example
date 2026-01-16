@@ -10,7 +10,11 @@
 # 7. 重载配置: sudo systemctl reload nginx
 
 server {
+    # 监听端口（根据实际情况修改）
+    # 默认使用 80 端口（HTTP）或 443 端口（HTTPS）
+    # 如果需要使用其他端口（如 3000），修改为：listen 3000;
     listen 80;
+    
     # 如果使用 HTTPS，取消下面的注释并配置 SSL
     # listen 443 ssl http2;
     # ssl_certificate /path/to/your/cert.pem;
@@ -19,6 +23,7 @@ server {
     # 替换为你的域名或 IP 地址
     server_name your-domain.com www.your-domain.com;
     # 或者使用 IP: server_name 192.168.1.100;
+    # 如果使用 IP + 端口访问，可以设置为：server_name _;
 
     # 前端静态文件目录
     root /var/www/mini_mall/frontend;
@@ -28,19 +33,11 @@ server {
     access_log /var/log/nginx/mini_mall_access.log;
     error_log /var/log/nginx/mini_mall_error.log;
 
-    # 前端路由（支持 SPA 单页应用）
-    location / {
-        try_files $uri $uri/ /index.html;
-        
-        # 安全头设置
-        add_header X-Frame-Options "SAMEORIGIN" always;
-        add_header X-Content-Type-Options "nosniff" always;
-        add_header X-XSS-Protection "1; mode=block" always;
-    }
-
-    # 后端 API 代理
+    # 后端 API 代理（必须在 location / 之前，确保优先级）
+    # 使用精确匹配或前缀匹配，确保 /api 请求不会被前端路由捕获
     location /api {
         # 代理到后端服务（修改端口为你的后端端口）
+        # 注意：proxy_pass 末尾不要加斜杠，这样会保留 /api 前缀
         proxy_pass http://localhost:8080;
         
         # 代理头设置（重要：保持原始请求信息）
@@ -62,22 +59,21 @@ server {
         # 缓冲设置（对于 API 请求，通常关闭缓冲以获得更快的响应）
         proxy_buffering off;
         
-        # CORS 头（如果后端已经处理 CORS，可以注释掉）
-        # add_header Access-Control-Allow-Origin $http_origin always;
-        # add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, OPTIONS" always;
-        # add_header Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With" always;
-        # add_header Access-Control-Allow-Credentials "true" always;
+        # 不缓存 API 响应
+        add_header Cache-Control "no-cache, no-store, must-revalidate" always;
+        add_header Pragma "no-cache" always;
+        add_header Expires "0" always;
+    }
+
+    # 前端路由（支持 SPA 单页应用）
+    # 注意：这个 location 必须在 /api 之后，避免捕获 API 请求
+    location / {
+        try_files $uri $uri/ /index.html;
         
-        # 处理 OPTIONS 预检请求（如果后端已处理，可注释）
-        # if ($request_method = 'OPTIONS') {
-        #     add_header Access-Control-Allow-Origin $http_origin;
-        #     add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, OPTIONS";
-        #     add_header Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With";
-        #     add_header Access-Control-Allow-Credentials "true";
-        #     add_header Content-Length 0;
-        #     add_header Content-Type text/plain;
-        #     return 204;
-        # }
+        # 安全头设置
+        add_header X-Frame-Options "SAMEORIGIN" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-XSS-Protection "1; mode=block" always;
     }
 
     # 静态资源缓存（CSS、JS、图片等）
