@@ -29,14 +29,39 @@ fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-# 增加常用系统路径
+# 增加常用系统路径（Ubuntu apt-get 安装的 Node.js 通常在 /usr/bin）
 export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 # 1. 检查 Node.js 和 npm
-if ! command -v node &> /dev/null; then
+# Ubuntu 使用 apt-get 安装时，可执行文件可能是 nodejs 而不是 node
+NODE_CMD=""
+if command -v node &> /dev/null; then
+    NODE_CMD="node"
+elif command -v nodejs &> /dev/null; then
+    NODE_CMD="nodejs"
+    echo -e "${YELLOW}⚠️  检测到 nodejs 命令，但未找到 node 命令${NC}"
+    echo -e "${YELLOW}   建议运行: sudo ln -s /usr/bin/nodejs /usr/bin/node${NC}"
+    echo -e "${YELLOW}   或者使用 nodejs 命令（脚本将尝试使用 nodejs）${NC}"
+else
     echo -e "${RED}❌ Node.js 未安装或未在 PATH 中找到${NC}"
-    echo -e "Current PATH: $PATH"
-    echo -e "建议：如果是 NVM 安装，请确保 NVM 环境变量被正确加载，或者手动建立软链接。"
+    echo -e "当前 PATH: $PATH"
+    echo -e "已检查的路径:"
+    echo -e "  - /usr/bin/node: $([ -f /usr/bin/node ] && echo '存在' || echo '不存在')"
+    echo -e "  - /usr/bin/nodejs: $([ -f /usr/bin/nodejs ] && echo '存在' || echo '不存在')"
+    echo -e "  - /usr/local/bin/node: $([ -f /usr/local/bin/node ] && echo '存在' || echo '不存在')"
+    echo -e "建议："
+    echo -e "  1. 如果是 NVM 安装，请确保 NVM 环境变量被正确加载"
+    echo -e "  2. 如果是 apt-get 安装，请确保已安装 nodejs 包: sudo apt-get install nodejs npm"
+    echo -e "  3. 如果已安装但找不到，请检查 PATH 环境变量"
+    exit 1
+fi
+
+# 验证 Node.js 版本
+NODE_VERSION=$($NODE_CMD --version 2>/dev/null)
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}✅ 检测到 Node.js: $NODE_VERSION (使用命令: $NODE_CMD)${NC}"
+else
+    echo -e "${RED}❌ 无法获取 Node.js 版本信息${NC}"
     exit 1
 fi
 
