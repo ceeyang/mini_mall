@@ -10,7 +10,7 @@ module.exports = {
             max_memory_restart: "1G",
             env: {
                 NODE_ENV: "production",
-                PORT: 3000,
+                PORT: 8080,
                 FRONTEND_URL: "*"
             },
             env_production: {
@@ -23,7 +23,7 @@ module.exports = {
             script: "serve",
             env: {
                 PM2_SERVE_PATH: '.',
-                PM2_SERVE_PORT: 8080,
+                PM2_SERVE_PORT: 3000,
                 PM2_SERVE_SPA: 'true',
                 PM2_SERVE_HOMEPAGE: '/index.html'
             }
