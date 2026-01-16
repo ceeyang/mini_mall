@@ -78,7 +78,7 @@ echo ""
 mkdir -p logs
 
 # 读取后端端口配置（从 backend/.env 或使用默认值）
-BACKEND_PORT=3000
+BACKEND_PORT=8080
 if [ -f "backend/.env" ]; then
     ENV_PORT=$(grep "^PORT=" backend/.env | cut -d '=' -f2 | tr -d '[:space:]')
     if [ ! -z "$ENV_PORT" ]; then
@@ -87,7 +87,7 @@ if [ -f "backend/.env" ]; then
 fi
 
 # 读取前端端口配置（从 package.json 或使用默认值）
-FRONTEND_PORT=8080
+FRONTEND_PORT=3000
 if [ -f "frontend/package.json" ]; then
     PKG_PORT=$(grep -o '"dev".*"-p [0-9]*"' frontend/package.json | grep -o '[0-9]*' | head -1)
     if [ ! -z "$PKG_PORT" ]; then

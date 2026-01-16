@@ -4,9 +4,9 @@
   "description": "Mini Mall - 前端代码",
   "main": "index.html",
   "scripts": {
-    "dev": "npx serve . -p 3031",
+    "dev": "npx serve . -p 3000",
     "build": "echo '静态站点，无需构建'",
-    "start": "npx serve . -p 3031"
+    "start": "npx serve . -p 3000"
   },
   "keywords": [
     "ecommerce",
