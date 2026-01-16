@@ -8,10 +8,10 @@
 
 export const config = {
   // 开发环境配置
-  API_BASE_URL: 'http://localhost:8080/api',
+  // API_BASE_URL: 'http://localhost:8080/api',
 
   // 生产环境配置 (注释掉上方配置，启用下方配置)
-  // API_BASE_URL: 'http://180.76.135.184:8080/api',
+  API_BASE_URL: 'http://180.76.135.184:8080/api',
 
   // 前端地址
   FRONTEND_URL: 'http://localhost:3000',
