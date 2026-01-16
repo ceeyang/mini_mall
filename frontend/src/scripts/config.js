@@ -80,7 +80,7 @@ export const config = {
   API_BASE_URL: getDefaultApiBaseUrl(),
   
   // 前端 URL
-  FRONTEND_URL: getEnv('FRONTEND_URL', 'http://localhost:8080'),
+  FRONTEND_URL: getEnv('FRONTEND_URL', 'http://localhost:3000'),
 };
 
 /**
