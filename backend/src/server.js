@@ -33,22 +33,49 @@ app.use(requestLogger);
 // CORS 配置：允许前端跨域请求
 app.use(cors({
   origin: function (origin, callback) {
-    // 允许无 origin 的请求（如 Postman、移动应用等）
+    // 允许无 origin 的请求（如 Postman、移动应用、服务器端请求等）
     if (!origin) {
       return callback(null, true);
     }
 
-    // 允许配置的前端地址
-    if (FRONTEND_URL === '*' || origin === FRONTEND_URL) {
+    // 如果配置为 '*'，允许所有来源（仅用于开发环境）
+    if (FRONTEND_URL === '*') {
       return callback(null, true);
     }
 
-    // 开发环境：允许 localhost 的任意端口（方便调试）
-    if (process.env.NODE_ENV === 'development' && origin.startsWith('http://localhost:')) {
+    // 允许配置的前端地址
+    if (origin === FRONTEND_URL) {
       return callback(null, true);
+    }
+
+    // 开发环境：允许 localhost 和 127.0.0.1 的任意端口（方便调试）
+    if (process.env.NODE_ENV !== 'production') {
+      if (origin.startsWith('http://localhost:') || 
+          origin.startsWith('http://127.0.0.1:') ||
+          origin.startsWith('https://localhost:') ||
+          origin.startsWith('https://127.0.0.1:')) {
+        return callback(null, true);
+      }
+    }
+
+    // 生产环境：允许同源请求（同一域名不同端口）
+    // 例如：前端 https://example.com，后端 https://example.com:8080
+    if (process.env.NODE_ENV === 'production') {
+      try {
+        const originUrl = new URL(origin);
+        const frontendUrl = new URL(FRONTEND_URL);
+        // 如果协议、主机名相同，允许（忽略端口）
+        if (originUrl.protocol === frontendUrl.protocol && 
+            originUrl.hostname === frontendUrl.hostname) {
+          return callback(null, true);
+        }
+      } catch (e) {
+        // URL 解析失败，继续检查
+      }
     }
 
     // 其他情况拒绝
+    console.warn(`⚠️  CORS 拒绝来源: ${origin}`);
     callback(new Error('不允许的跨域请求'));
   },
   credentials: true, // 允许携带 cookie 和认证信息

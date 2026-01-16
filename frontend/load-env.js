@@ -1,8 +1,24 @@
 /**
  * 环境变量加载脚本
- * 从 frontend/.env 文件加载环境变量并注入到页面
+ * 仅在开发环境从 .env 文件加载环境变量
+ * 生产环境不加载 .env 文件，使用硬编码配置
+ * 
  * 此脚本需要在 HTML 中通过 <script> 标签引入
  */
+
+/**
+ * 判断是否为开发环境
+ * @returns {boolean} 是否为开发环境
+ */
+function isDevelopment() {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+  
+  const hostname = window.location.hostname;
+  // 开发环境：localhost 或 127.0.0.1
+  return hostname === 'localhost' || hostname === '127.0.0.1';
+}
 
 /**
  * 解析 .env 文件内容
@@ -40,20 +56,27 @@ function parseEnvFile(content) {
 }
 
 /**
- * 加载环境变量
+ * 加载环境变量（仅开发环境）
  */
 async function loadEnv() {
-  // 创建 ENV 对象（如果不存在）
+  // 生产环境：不加载 .env 文件
+  if (!isDevelopment()) {
+    console.log('[Env] 生产环境，跳过 .env 文件加载，使用硬编码配置');
+    return;
+  }
+  
+  // 开发环境：从 .env 文件加载
   if (typeof window !== 'undefined') {
     window.ENV = window.ENV || {};
     
     // 尝试从多个位置加载 .env 文件（优先级顺序）
     // 使用绝对路径，从项目根目录开始查找
     const envPaths = [
-      '/.env',               // 根目录的 .env（兼容性）
-      '/.env.example'
+      '/.env',               // 根目录的 .env
+      '/.env.example'        // 如果 .env 不存在，使用示例文件
     ];
     
+    let loaded = false;
     for (const path of envPaths) {
       try {
         const response = await fetch(path);
@@ -62,15 +85,20 @@ async function loadEnv() {
           const env = parseEnvFile(content);
           // 合并到 window.ENV
           Object.assign(window.ENV, env);
-          console.log(`✅ 已加载环境变量: ${path}`);
+          console.log(`[Env] ✅ 已加载环境变量: ${path}`);
+          loaded = true;
           break;
         }
       } catch (error) {
         // 忽略文件不存在的错误
       }
     }
+    
+    if (!loaded) {
+      console.warn('[Env] ⚠️  未找到 .env 文件，将使用默认配置');
+    }
   }
 }
 
-// 自动加载
+// 自动加载（仅在开发环境）
 loadEnv();

@@ -64,7 +64,7 @@ function getDefaultApiBaseUrl() {
     
     // 开发环境：localhost 或 127.0.0.1，且端口为 8080
     if ((hostname === 'localhost' || hostname === '127.0.0.1') && port === '8080') {
-      return 'http://localhost:3000/api';
+      return 'http://localhost:8080/api';
     }
   }
   

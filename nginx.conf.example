@@ -1,0 +1,102 @@
+# Nginx 配置示例 - Mini Mall 项目
+# 
+# 使用方法：
+# 1. Ubuntu/Debian: 复制到 /etc/nginx/sites-available/mini_mall
+# 2. CentOS/RHEL: 复制到 /etc/nginx/conf.d/mini_mall.conf
+# 3. 修改 server_name 为你的域名或 IP
+# 4. 修改 proxy_pass 中的端口为你的后端端口（默认 8080）
+# 5. 修改 root 为你的前端文件路径
+# 6. 测试配置: sudo nginx -t
+# 7. 重载配置: sudo systemctl reload nginx
+
+server {
+    listen 80;
+    # 如果使用 HTTPS，取消下面的注释并配置 SSL
+    # listen 443 ssl http2;
+    # ssl_certificate /path/to/your/cert.pem;
+    # ssl_certificate_key /path/to/your/key.pem;
+    
+    # 替换为你的域名或 IP 地址
+    server_name your-domain.com www.your-domain.com;
+    # 或者使用 IP: server_name 192.168.1.100;
+
+    # 前端静态文件目录
+    root /var/www/mini_mall/frontend;
+    index index.html;
+
+    # 日志文件
+    access_log /var/log/nginx/mini_mall_access.log;
+    error_log /var/log/nginx/mini_mall_error.log;
+
+    # 前端路由（支持 SPA 单页应用）
+    location / {
+        try_files $uri $uri/ /index.html;
+        
+        # 安全头设置
+        add_header X-Frame-Options "SAMEORIGIN" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-XSS-Protection "1; mode=block" always;
+    }
+
+    # 后端 API 代理
+    location /api {
+        # 代理到后端服务（修改端口为你的后端端口）
+        proxy_pass http://localhost:8080;
+        
+        # 代理头设置（重要：保持原始请求信息）
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Port $server_port;
+        
+        # 超时设置
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+        
+        # 缓冲设置（对于 API 请求，通常关闭缓冲以获得更快的响应）
+        proxy_buffering off;
+        
+        # CORS 头（如果后端已经处理 CORS，可以注释掉）
+        # add_header Access-Control-Allow-Origin $http_origin always;
+        # add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, OPTIONS" always;
+        # add_header Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With" always;
+        # add_header Access-Control-Allow-Credentials "true" always;
+        
+        # 处理 OPTIONS 预检请求（如果后端已处理，可注释）
+        # if ($request_method = 'OPTIONS') {
+        #     add_header Access-Control-Allow-Origin $http_origin;
+        #     add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, OPTIONS";
+        #     add_header Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With";
+        #     add_header Access-Control-Allow-Credentials "true";
+        #     add_header Content-Length 0;
+        #     add_header Content-Type text/plain;
+        #     return 204;
+        # }
+    }
+
+    # 静态资源缓存（CSS、JS、图片等）
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|webp)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        access_log off;
+    }
+
+    # 禁止访问隐藏文件
+    location ~ /\. {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+
+    # Gzip 压缩
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types text/plain text/css text/xml text/javascript application/javascript application/xml+rss application/json;
+}
