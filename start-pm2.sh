@@ -392,8 +392,8 @@ fi
 
 echo ""
 print_msg "$GREEN" "🎉 部署完成！"
-printf "前端运行在: http://localhost:8080\n"
-printf "后端运行在: http://localhost:3000/api\n"
+printf "前端运行在: http://localhost:3000\n"
+printf "后端运行在: http://localhost:8080/api\n"
 echo ""
 printf "常用 PM2 命令:\n"
 printf "  pm2 list        # 查看进程状态\n"
