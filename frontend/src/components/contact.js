@@ -112,7 +112,7 @@ export function renderContact(isStandalonePage = false) {
       </section>
     `;
   }
-  
+
   // 首页版本（简化版）
   return `
     <section id="contact" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -156,7 +156,7 @@ export function renderContact(isStandalonePage = false) {
           </button>
         </form>
         <div class="mt-6 text-center">
-          <a href="src/pages/contact.html" class="text-indigo-600 hover:text-indigo-700 transition-colors duration-200 cursor-pointer font-medium">
+          <a href="/contact" class="text-indigo-600 hover:text-indigo-700 transition-colors duration-200 cursor-pointer font-medium">
             查看完整联系方式 →
           </a>
         </div>

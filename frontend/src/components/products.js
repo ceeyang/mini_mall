@@ -49,11 +49,11 @@ export async function renderProducts(limit = null) {
   if (cachedProducts.length === 0) {
     cachedProducts = await productsAPI.getProducts();
   }
-  
+
   const displayProducts = limit ? cachedProducts.slice(0, limit) : cachedProducts;
   const productsHTML = displayProducts.map(product => renderProductCard(product)).join('');
   const showMoreButton = limit && cachedProducts.length > limit;
-  
+
   return `
     <section id="products" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
       <div class="text-center mb-12">
@@ -65,7 +65,7 @@ export async function renderProducts(limit = null) {
       </div>
       ${showMoreButton ? `
         <div class="text-center mt-12">
-          <a href="src/pages/products.html" class="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-200 cursor-pointer font-medium shadow-lg">
+          <a href="/products" class="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-200 cursor-pointer font-medium shadow-lg">
             查看更多商品 →
           </a>
         </div>
@@ -80,16 +80,16 @@ export async function renderProducts(limit = null) {
 export function initProducts() {
   // 为所有"加入购物车"按钮添加事件监听
   document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-    button.addEventListener('click', async function() {
+    button.addEventListener('click', async function () {
       const productId = this.getAttribute('data-product-id');
-      
+
       // 从缓存或 API 获取商品详情
       let product = cachedProducts.find(p => p.id === productId || p._id === productId);
-      
+
       if (!product) {
         product = await productsAPI.getProductById(productId);
       }
-      
+
       if (product) {
         cartManager.addItem(product, 1);
         showNotification(`${product.name} 已添加到购物车！`, 'success');

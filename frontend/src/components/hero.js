@@ -18,7 +18,7 @@ export function renderHero() {
           发现精选商品，享受优质购物体验
         </p>
         <div class="flex justify-center space-x-4">
-                    <a href="src/pages/products.html" class="bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-200 cursor-pointer font-medium shadow-lg">
+                    <a href="/products" class="bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-200 cursor-pointer font-medium shadow-lg">
                       浏览商品
                     </a>
           <a href="#about" class="bg-white text-indigo-600 px-8 py-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 cursor-pointer font-medium border-2 border-indigo-600">

@@ -137,7 +137,7 @@ export function initLogin() {
   // 切换登录/注册模式
   const switchModeBtn = document.getElementById('switch-mode-btn');
   if (switchModeBtn) {
-    switchModeBtn.addEventListener('click', function() {
+    switchModeBtn.addEventListener('click', function () {
       const newMode = this.getAttribute('data-mode') === 'login';
       const loginContainer = document.getElementById('login-container');
       if (loginContainer) {
@@ -152,18 +152,18 @@ export function initLogin() {
   // Google 登录
   const googleLoginBtn = document.getElementById('google-login-btn');
   if (googleLoginBtn) {
-    googleLoginBtn.addEventListener('click', async function() {
+    googleLoginBtn.addEventListener('click', async function () {
       const originalText = this.textContent;
       this.disabled = true;
       this.textContent = '处理中...';
 
       const result = await authManager.loginWithGoogle();
-      
+
       if (result.success) {
         showNotification('登录成功！', 'success');
         // 跳转到用户中心或返回上一页
         setTimeout(() => {
-          const returnUrl = new URLSearchParams(window.location.search).get('return') || 'user-center.html';
+          const returnUrl = new URLSearchParams(window.location.search).get('return') || '/user-center';
           window.location.href = returnUrl;
         }, 1000);
       } else {
@@ -177,22 +177,22 @@ export function initLogin() {
   // 表单提交
   const authForm = document.getElementById('auth-form');
   if (authForm) {
-    authForm.addEventListener('submit', async function(e) {
+    authForm.addEventListener('submit', async function (e) {
       e.preventDefault();
-      
+
       // 从表单容器获取当前模式（确保获取最新状态）
       // 如果容器没有 data-mode 属性，则通过检查是否存在姓名输入框来判断
       const loginContainer = document.getElementById('login-container');
       let currentMode = loginContainer?.getAttribute('data-mode');
-      
+
       // 如果容器没有保存模式，通过检查表单中是否有姓名输入框来判断
       if (!currentMode) {
         const nameInput = document.getElementById('name');
         currentMode = nameInput ? 'register' : 'login';
       }
-      
+
       const isCurrentlyLoginMode = currentMode === 'login';
-      
+
       const formData = new FormData(this);
       const email = formData.get('email');
       const password = formData.get('password');
@@ -219,7 +219,7 @@ export function initLogin() {
       if (result.success) {
         showNotification(isCurrentlyLoginMode ? '登录成功！' : '注册成功！', 'success');
         setTimeout(() => {
-          const returnUrl = new URLSearchParams(window.location.search).get('return') || 'user-center.html';
+          const returnUrl = new URLSearchParams(window.location.search).get('return') || '/user-center';
           window.location.href = returnUrl;
         }, 1000);
       } else {
