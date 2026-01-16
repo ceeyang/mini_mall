@@ -12,9 +12,31 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+
+# 0. 尝试加载环境变量 (解决 NVM 或自定义路径找不到 Node 的问题)
+# 加载 .bashrc 和 .profile (针对 Ubuntu 等 Linux 发行版)
+if [ -f "$HOME/.bashrc" ]; then
+    # 避免在此脚本中执行 .bashrc 中的交互式命令导致的问题，通常 .bashrc 会有 check
+    # 但为了保险，我们只尝试加载 NVM 相关的
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+elif [ -f "$HOME/.profile" ]; then
+    # source "$HOME/.profile" # profile 可能会打印东西，暂时只加 NVM
+    true
+fi
+
+# 再次明确检查 NVM 默认路径
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# 增加常用系统路径
+export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
 # 1. 检查 Node.js 和 npm
 if ! command -v node &> /dev/null; then
-    echo -e "${RED}❌ Node.js 未安装，请先安装 Node.js${NC}"
+    echo -e "${RED}❌ Node.js 未安装或未在 PATH 中找到${NC}"
+    echo -e "Current PATH: $PATH"
+    echo -e "建议：如果是 NVM 安装，请确保 NVM 环境变量被正确加载，或者手动建立软链接。"
     exit 1
 fi
 
